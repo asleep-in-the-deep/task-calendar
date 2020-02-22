@@ -72,7 +72,7 @@ function isCurrentDay($date) {
 }
 
 function getTasks($date) {
-    global $db;
+    $db = Database::getInstance()->direct();
 
     $result = $db->query('SELECT * FROM tasks WHERE date = "'.$date.'"');
     $eventNum = $result->num_rows;
@@ -91,8 +91,8 @@ function getTasks($date) {
     }
 }
 
-function isHoliday($date) {
-    global $db;
+function getHoliday($date) {
+    $db = Database::getInstance()->direct();
     $result = $db->query('SELECT * FROM days WHERE date = "'.$date.'"');
 
     if ($result->num_rows > 0) {
@@ -105,7 +105,7 @@ function isHoliday($date) {
 }
 
 function isFinishedDay($date) {
-    global $db;
+    $db = Database::getInstance()->direct();
     $result = $db->query('SELECT * FROM days WHERE date = "'.$date.'"');
 
     if ($result->num_rows > 0) {
@@ -159,12 +159,11 @@ function getCalendar($month = '', $year = '') {
         for ($i=1; $i<=$dayBoxes; $i++) {
             if ($i >= $currentFirstWeekDay && $dayCount <= $totalDaysOfMonth) {
                 $currentDate = $dateYear.'-'.$dateMonth.'-'.$dayCount;
-                if ($i % 7 == 0 || ($i % 7 - 6) == 0 || isHoliday($currentDate)) {
+                if ($i % 7 == 0 || ($i % 7 - 6) == 0 || getHoliday($currentDate)) {
                     echo '<div class="day disabled">';
                     isCurrentDay($currentDate);
                 } else {
                     echo '<div class="day">';
-                    echo '<div class="day-button">Изменить</div>';
                     isCurrentDay($currentDate);
                     getTasks($currentDate);
                     isFinishedDay($currentDate);
