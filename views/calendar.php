@@ -1,15 +1,6 @@
 <div class="calendar-header">
     <h1><select class="month-select"><?= getAllMonths($dateMonth) ?></select></h1>
-    <select class="year-select">
-	<?php
-	$minYear = 2019;
-	$maxYear = 2022;
-	for ($i=$minYear; $i<=$maxYear; $i++) {
-        $selectOption = ($i == $dateYear) ? 'selected' : '';
-        ?><option value="<?= $i ?>" <?= $selectOption ?>><?= $i ?></option><?php
-    }
-	?>
-	</select>
+    <select class="year-select"><?=getYearList($dateYear) ?></select>
 </div>
 <div class="calendar">
     <span class="day-name">Пн</span>
@@ -21,7 +12,7 @@
     <span class="day-name">Вс</span>
 <?php
 $dayCount = 1;
-for ($i=1; $i<=$dayBoxes; $i++) {
+for ($i=1; $i<=; $i++) {
     if ($i >= $currentFirstWeekDay && $dayCount <= $totalDaysOfMonth) {
         $currentDate = $dateYear.'-'.$dateMonth.'-'.$dayCount;
         $currentDay = date('j', strtotime($currentDate));

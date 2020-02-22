@@ -6,5 +6,6 @@ spl_autoload_register(function ($class) {
 require_once 'config.php';
 require_once 'functions.php';
 
+require_once 'views/helpers.php';
 require_once 'views/template.php';
 ?>
