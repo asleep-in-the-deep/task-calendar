@@ -12,23 +12,6 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
     }
 }
 
-function getCalendarHeader($month, $year) {
-    echo '<div class="calendar-header">
-                <h1><select class="month-select">'.getAllMonths($month).'</select></h1>
-                <select class="year-select">'.getYearList($year).'</select>
-            </div>';
-}
-
-function getDayNames() {
-    echo '<span class="day-name">Пн</span>
-          <span class="day-name">Вт</span>
-          <span class="day-name">Ср</span>
-          <span class="day-name">Чт</span>
-          <span class="day-name">Пт</span>
-          <span class="day-name">Сб</span>
-          <span class="day-name">Вс</span>';
-}
-
 function getAllMonths($selected = '') {
     $months = '';
     $monthArray = array(
@@ -60,15 +43,9 @@ function isCurrentDay($date) {
     $currentMonth = date('n', strtotime($date));
 
     if ($currentDay == date('j') && $currentMonth == date('n')) {
-        echo '<span class="day-number current">';
-        echo $currentDay;
-        echo '</span>';
+        return true;
     }
-    else {
-        echo '<span class="day-number">';
-        echo $currentDay;
-        echo '</span>';
-    }
+    return false;
 }
 
 function getTasks($date) {
@@ -150,30 +127,5 @@ function getCalendar($month = '', $year = '') {
         $dayBoxes = ceil($numberOfWeeks) * 7;
     }
 
-    getCalendarHeader($dateMonth, $dateYear);
-
-    echo '<div class="calendar">';
-        getDayNames();
-
-        $dayCount = 1;
-        for ($i=1; $i<=$dayBoxes; $i++) {
-            if ($i >= $currentFirstWeekDay && $dayCount <= $totalDaysOfMonth) {
-                $currentDate = $dateYear.'-'.$dateMonth.'-'.$dayCount;
-                if ($i % 7 == 0 || ($i % 7 - 6) == 0 || isHoliday($currentDate)) {
-                    echo '<div class="day disabled">';
-                    isCurrentDay($currentDate);
-                } else {
-                    echo '<div class="day">';
-                    echo '<div class="day-button">Изменить</div>';
-                    isCurrentDay($currentDate);
-                    getTasks($currentDate);
-                    isFinishedDay($currentDate);
-                }
-                echo '</div>';
-                $dayCount++;
-            } else {
-                echo '<div class="day disabled">&nbsp;</div>';
-            }
-        }
-    echo '</div>';
+    require("views/calendar.php");
 }
