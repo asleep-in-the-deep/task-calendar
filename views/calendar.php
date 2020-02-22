@@ -12,7 +12,7 @@
     <span class="day-name">Вс</span>
 <?php
 $dayCount = 1;
-for ($i=1; $i<=; $i++) {
+for ($i=1; $i<=$dayBoxes; $i++) {
     if ($i >= $currentFirstWeekDay && $dayCount <= $totalDaysOfMonth) {
         $currentDate = $dateYear.'-'.$dateMonth.'-'.$dayCount;
         $currentDay = date('j', strtotime($currentDate));

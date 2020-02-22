@@ -61,12 +61,16 @@ function isFinishedDay($date) {
 }
 
 function getCalendar($month = '', $year = '') {
-	// TODO: validation $month and $year
-    if ($month == '') {
-        $month = date('m');
+	//TODO: validation of $month and $year
+    if ($month != '') {
+        $dateMonth = $month;
+    } else {
+        $dateMonth = date('m');
     }
 
-    if ($year == '') {
+    if ($year != '') {
+        $dateYear = $year;
+    } else {
         $dateYear = date('Y');
     }
 
