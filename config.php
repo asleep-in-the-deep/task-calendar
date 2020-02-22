@@ -12,8 +12,11 @@ $dbUsername = 'root';
 $dbPassword = 'root';
 $dbName = 'calendar';
 
-$config = Config::getInstance();
-$config["db_host"] = $dbHost;
-$config["db_user"] = $dbUsername;
-$config["db_pass"] = $dbPassword;
-$config["db_name"] = $dbName;
+global $db;
+
+$db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
+
+
+if($db->connect_error) {
+    die('Connection failed: ' . $db->connect_error);
+}
