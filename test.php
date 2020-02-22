@@ -6,5 +6,8 @@ spl_autoload_register(function ($class) {
 require_once 'config.php';
 require_once 'functions.php';
 
-require_once 'views/template.php';
+Database::getInstance();
+$t = new Task();
+$t->all();
+
 ?>

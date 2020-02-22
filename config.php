@@ -8,15 +8,12 @@ setlocale(LC_ALL, 'ru_RU.UTF-8');
 ini_set('date.timezone', 'Europe/Moscow');
 
 $dbHost = 'localhost';
-$dbUsername = 'root';
-$dbPassword = 'root';
+$dbUsername = 'calendar';
+$dbPassword = 'LbMLQxpBecvy2d1V';
 $dbName = 'calendar';
 
-global $db;
-
-$db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
-
-
-if($db->connect_error) {
-    die('Connection failed: ' . $db->connect_error);
-}
+$config = Config::getInstance();
+$config["db_host"] = $dbHost;
+$config["db_user"] = $dbUsername;
+$config["db_pass"] = $dbPassword;
+$config["db_name"] = $dbName;

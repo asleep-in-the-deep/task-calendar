@@ -72,7 +72,7 @@ function isCurrentDay($date) {
 }
 
 function getTasks($date) {
-    global $db;
+    $db = Database::getInstance()->direct();
 
     $result = $db->query('SELECT * FROM tasks WHERE date = "'.$date.'"');
     $eventNum = $result->num_rows;
@@ -92,7 +92,7 @@ function getTasks($date) {
 }
 
 function isHoliday($date) {
-    global $db;
+    $db = Database::getInstance()->direct();
     $result = $db->query('SELECT * FROM days WHERE date = "'.$date.'"');
 
     if ($result->num_rows > 0) {
@@ -105,7 +105,7 @@ function isHoliday($date) {
 }
 
 function isFinishedDay($date) {
-    global $db;
+    $db = Database::getInstance()->direct();
     $result = $db->query('SELECT * FROM days WHERE date = "'.$date.'"');
 
     if ($result->num_rows > 0) {
