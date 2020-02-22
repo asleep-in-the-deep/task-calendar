@@ -1,6 +1,15 @@
 <div class="calendar-header">
     <h1><select class="month-select"><?= getAllMonths($dateMonth) ?></select></h1>
-    <select class="year-select"><?= getYearList($dateYear) ?></select>
+    <select class="year-select">
+	<?php
+	$minYear = 2019;
+	$maxYear = 2022;
+	for ($i=$minYear; $i<=$maxYear; $i++) {
+        $selectOption = ($i == $dateYear) ? 'selected' : '';
+        ?><option value="<?= $i ?>" <?= $selectOption ?>><?= $i ?></option><?php
+    }
+	?>
+	</select>
 </div>
 <div class="calendar">
     <span class="day-name">Пн</span>

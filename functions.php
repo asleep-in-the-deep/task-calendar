@@ -27,17 +27,6 @@ function getAllMonths($selected = '') {
     return $months;
 }
 
-function getYearList($selected = '') {
-    $years = '';
-    $minYear = 2019;
-    $maxYear = 2022;
-    for ($i=$minYear; $i<=$maxYear; $i++) {
-        $selectOption = ($i == $selected) ? 'selected' : '';
-        $years .= '<option value="'.$i.'" '.$selectOption.' >'.$i.'</option>';
-    }
-    return $years;
-}
-
 function isCurrentDay($date) {
     $currentDay = date('j', strtotime($date));
     $currentMonth = date('n', strtotime($date));
