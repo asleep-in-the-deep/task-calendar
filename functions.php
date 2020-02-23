@@ -20,16 +20,8 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
 
 function getTasks($date) {
     $tasks = Task::whereDateEq($date);
-
-    if(count($tasks) > 0) {
-		foreach ($tasks as $k => $task) {
-			if ($task['status'] == 0) {
-				echo '<section class="task '.$task['color'].'">'.$task['title'].'</section>';
-			} else {
-				echo '<section class="task done">'.$task['title'].'</section>';
-			}
-		}
-    }
+    $view = new Views\Tasks($tasks);
+    $view->render();
 }
 
 function isHoliday($date) {
