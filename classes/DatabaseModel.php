@@ -1,9 +1,6 @@
 <?php
 
-// TODO: сделать общий класс для ArrayAccess
-// Config и DatabaseModel с одинаковой реализацией
-
-class DatabaseModel implements JsonSerializable, ArrayAccess  {
+class DatabaseModel implements JsonSerializable, ArrayAccess {
 	protected $data;
 	protected $tablename;
 
@@ -15,9 +12,7 @@ class DatabaseModel implements JsonSerializable, ArrayAccess  {
 		return "";
 	}
 
-	public static function whereDateEq($date) {
-		$result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName().' WHERE date = "'.$date.'"');
-
+	protected static function fetch($result) {
 		$objects = [];
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
@@ -27,16 +22,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess  {
 		return $objects;
 	}
 
+	public static function whereDateEq($date) {
+		$result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName().' WHERE date = "'.$date.'"');
+		return static::fetch($result);
+	}
+
 	public static function all() {
 		$result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName());
-
-		$objects = [];
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				array_push($objects, new static($row));
-			}
-		}
-		return $objects;
+		return static::fetch($result);
 	}
 
 	public function offsetGet($offset) {
