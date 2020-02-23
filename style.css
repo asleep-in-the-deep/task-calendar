@@ -43,7 +43,7 @@ body {
     font-size: 20px;
     font-weight: 600;
     color: #51565d;
-    background: url('down-arrow.svg') #fff no-repeat right bottom 30%;
+    background: url('img/down-arrow.svg') #fff no-repeat right bottom 30%;
     background-size: .35em;
     border: none;
     outline: none;
@@ -61,7 +61,7 @@ body {
     font-size: 15px;
     font-weight: 600;
     color: rgba(81, 86, 93, 0.4);
-    background: url('down-arrow.svg') #fff no-repeat right bottom 30%;
+    background: url('img/down-arrow.svg') #fff no-repeat right bottom 30%;
     background-size: .35em;
     border: none;
     outline: none;
@@ -209,7 +209,7 @@ body {
 }
 
 .finished {
-    background: url('tick.svg') no-repeat;
+    background: url('img/tick.svg') no-repeat;
     background-size: cover;
     position: absolute;
     margin-top: -50px;
@@ -228,7 +228,7 @@ body {
 }
 
 .add-task {
-    background: url("plus.svg") no-repeat;
+    background: url("img/plus.svg") no-repeat;
     width: 17px;
     height: 17px;
     margin-top: 8px;
