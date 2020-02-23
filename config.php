@@ -8,8 +8,8 @@ setlocale(LC_ALL, 'ru_RU.UTF-8');
 ini_set('date.timezone', 'Europe/Moscow');
 
 $dbHost = 'localhost';
-$dbUsername = 'calendar';
-$dbPassword = 'LbMLQxpBecvy2d1V';
+$dbUsername = 'root';
+$dbPassword = 'root';
 $dbName = 'calendar';
 
 $config = Config::getInstance();

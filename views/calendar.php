@@ -1,6 +1,6 @@
 <div class="calendar-header">
     <h1><select class="month-select"><?= getAllMonths($dateMonth) ?></select></h1>
-    <select class="year-select"><?= getYearList($dateYear) ?></select>
+    <select class="year-select"><?=getYearList($dateYear) ?></select>
 </div>
 <div class="calendar">
     <span class="day-name">Пн</span>

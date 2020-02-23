@@ -7,7 +7,7 @@ require_once 'config.php';
 require_once 'functions.php';
 
 Database::getInstance();
-$t = new Task();
-$t->all();
+
+echo json_encode(Task::all());
 
 ?>
