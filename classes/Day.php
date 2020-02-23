@@ -9,4 +9,11 @@ class Day extends DatabaseModel {
 	public static function getTableName() {
 		return "days";
 	}
+
+    public function isHoliday() {
+        if ($this['status'] == 0) {
+            return true;
+        }
+        return false;
+    }
 }

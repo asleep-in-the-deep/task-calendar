@@ -1,8 +1,8 @@
-<div class="day<?= $disabled?' disabled':'' ?>"><?php if (!$disabled) { ?>
+<div class="day<?= $this->disabled?' disabled':'' ?>"><?php if (!$this->disabled) { ?>
 	<div class="day-button">Изменить</div><?php } ?>
-	<span class="day-number<?= isCurrentDay($currentDate)?' current':'' ?>"><?= $currentDay ?></span>
+	<span class="day-number<?= isCurrentDay($this->currentDate)?' current':'' ?>"><?= $this->currentDay ?></span>
     <?php
-    getTasks($currentDate);
-    isFinishedDay($currentDate);
+    getTasks($this->currentDate);
+    isFinishedDay($this->currentDate);
     ?>
 </div>

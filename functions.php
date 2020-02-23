@@ -24,19 +24,6 @@ function getTasks($date) {
     $view->render();
 }
 
-function isHoliday($date) {
-	$days = Day::whereDateEq($date);
-
-    if (count($days) > 0) {
-        foreach ($days as $k => $day) {
-            if ($day['status'] == 0) {
-                return true;
-            }
-        }
-    }
-	return false;
-}
-
 function isFinishedDay($date) {
 	$days = Day::whereDateEq($date);
 

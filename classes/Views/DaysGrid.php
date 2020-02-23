@@ -2,6 +2,8 @@
 
 namespace Views;
 
+use Day;
+
 class DaysGrid {
 	public function __construct($month = '', $year = '') {
 		//TODO: validation of $month and $year
@@ -41,13 +43,25 @@ class DaysGrid {
 		require("views/calendar.php");
 	}
 
+    private $currentDate;
+	private $currentDay;
+	private $disabled;
+	private $day;
+
 	public function makeGrid() {
 		$dayCount = 1;
 		for ($i=1; $i <= $this->dayBoxes; $i++) {
 			if ($i >= $this->currentFirstWeekDay && $dayCount <= $this->totalDaysOfMonth) {
-				$currentDate = $this->dateYear.'-'.$this->dateMonth.'-'.$dayCount;
-				$currentDay = date('j', strtotime($currentDate));
-				$disabled = ($i % 7 == 0 || ($i % 7 - 6) == 0 || isHoliday($currentDate));
+                $this->currentDate = $this->dateYear . '-' . $this->dateMonth . '-' . $dayCount;
+                $this->day = Day::whereDateEq($this->currentDate);
+
+                $holiday = false;
+                if (count($this->day) > 0) {
+                    $holiday = $this->day[0]->isHoliday();
+                }
+
+				$this->currentDay = date('j', strtotime($this->currentDate));
+				$this->disabled = ($i % 7 == 0 || ($i % 7 - 6) == 0 || $holiday);
 				require 'views/day.php';
 				$dayCount++;
 			} else {
