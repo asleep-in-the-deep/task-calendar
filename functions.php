@@ -24,21 +24,6 @@ function getTasks($date) {
     $view->render();
 }
 
-function isFinishedDay($date) {
-	$days = Day::whereDateEq($date);
-
-	if (count($days) > 0)
-	{
-		foreach ($days as $k => $day) {
-			if ($day['status'] == 1) {
-                echo '<div class="finished"></div>';
-            }
-		}
-	} else {
-        echo '<div class="add-task"></div>';
-    }
-}
-
 function getCalendar($month = '', $year = '') {
 	$grid = new Views\DaysGrid($month, $year);
 	$grid->render();

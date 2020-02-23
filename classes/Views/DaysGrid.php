@@ -53,11 +53,15 @@ class DaysGrid {
 		for ($i=1; $i <= $this->dayBoxes; $i++) {
 			if ($i >= $this->currentFirstWeekDay && $dayCount <= $this->totalDaysOfMonth) {
                 $this->currentDate = $this->dateYear . '-' . $this->dateMonth . '-' . $dayCount;
-                $this->day = Day::whereDateEq($this->currentDate);
+                $days = Day::whereDateEq($this->currentDate);
 
                 $holiday = false;
-                if (count($this->day) > 0) {
-                    $holiday = $this->day[0]->isHoliday();
+
+                if (count($days) > 0) {
+                    $this->day = $days[0];
+                    $holiday = $this->day->isHoliday();
+                } else {
+                    $this->day = new Day([]);
                 }
 
 				$this->currentDay = date('j', strtotime($this->currentDate));
