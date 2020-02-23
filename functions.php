@@ -20,20 +20,15 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
 
 function getTasks($date) {
     $tasks = Task::whereDateEq($date);
-	/* Зачем? */
-    $eventNum = count($tasks);
 
     if(count($tasks) > 0) {
-        if ($eventNum > 0) {
-	/* */
-            foreach ($tasks as $k => $task) {
-                if ($task['status'] == 0) {
-                    echo '<section class="task '.$task['color'].'">'.$task['title'].'</section>';
-                } else {
-                    echo '<section class="task done">'.$task['title'].'</section>';
-                }
-            }
-        }
+		foreach ($tasks as $k => $task) {
+			if ($task['status'] == 0) {
+				echo '<section class="task '.$task['color'].'">'.$task['title'].'</section>';
+			} else {
+				echo '<section class="task done">'.$task['title'].'</section>';
+			}
+		}
     }
 }
 
