@@ -1,6 +1,6 @@
 <?php
 spl_autoload_register(function ($class) {
-    include 'classes/' . $class . '.php';
+    include 'classes/' . str_replace('\\', '/', $class) . '.php';
 });
 
 require_once 'config.php';

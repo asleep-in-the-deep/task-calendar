@@ -1,4 +1,9 @@
 <?php
+
+spl_autoload_register(function ($class) {
+    include 'classes/' . str_replace('\\', '/', $class) . '.php';
+});
+
 require_once 'config.php';
 
 if (isset($_POST['function']) && !empty($_POST['function'])) {
@@ -60,36 +65,6 @@ function isFinishedDay($date) {
 }
 
 function getCalendar($month = '', $year = '') {
-	//TODO: validation of $month and $year
-    if ($month != '') {
-        $dateMonth = $month;
-    } else {
-        $dateMonth = date('m');
-    }
-
-    if ($year != '') {
-        $dateYear = $year;
-    } else {
-        $dateYear = date('Y');
-    }
-
-    $firstMonthDay = '01-'.$dateMonth.'-'.$dateYear;
-
-    $currentFirstWeekDay = date('N', strtotime($firstMonthDay));
-
-    $totalDaysOfMonth = cal_days_in_month(CAL_GREGORIAN, $dateMonth, $dateYear);
-
-    if ($currentFirstWeekDay == 1) {
-        $numberOfWeeks = $totalDaysOfMonth / 7;
-    } else {
-        $numberOfWeeks = ($totalDaysOfMonth + $currentFirstWeekDay) / 7;
-    }
-
-    if ($numberOfWeeks > 5 && $numberOfWeeks < 5.2) {
-        $dayBoxes = round($numberOfWeeks) * 7;
-    } else {
-        $dayBoxes = ceil($numberOfWeeks) * 7;
-    }
-
-    require("views/calendar.php");
+	$grid = new Views\DaysGrid($month, $year);
+	$grid->render();
 }
