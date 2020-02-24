@@ -3,7 +3,16 @@
 class Task extends DatabaseModel {
     public function __construct($data) {
         $this->data = $data;
-        $this->tablename = "tasks";
+        parent::__construct();
+    }
+
+    public static function getFields() {
+        return ["id" => "primary|integer|default",
+                "date" => "date",
+                "title" => "varchar:255",
+                "color" => "varchar:20|default",
+                "comment" => "text",
+                "status" => "boolean|default"];
     }
 
     public static function getTableName() {

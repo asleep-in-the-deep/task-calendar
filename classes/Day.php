@@ -3,11 +3,16 @@
 class Day extends DatabaseModel {
     public function __construct($data) {
         $this->data = $data;
-        $this->tablename = "days";
+        parent::__construct();
     }
 
     public static function getTableName() {
         return "days";
+    }
+
+    public static function getFields() {
+        return ["date" => "primary|date",
+                "status" => "boolean"];
     }
 
     public function isHoliday() {
