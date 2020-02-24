@@ -14,6 +14,28 @@ class Database extends Singleton
         parent::__construct();
     }
 
+    public static function getFieldType($parts){
+        $types = ["integer", "date", "boolean", "text", "varchar"];
+
+        foreach ($parts as $key => $x) {
+            if (in_array($x, $types)) {
+                return $x;
+            }
+            $new_parts = explode(":", $x);
+            if (in_array($new_parts[0], $types)) {
+                return $new_parts[0];
+            }
+        }
+        return null;
+    }
+
+    public static function isStringType($type){
+        if ($type == "varchar" || $type == "text" || $type == "date") {
+            return true;
+        }
+        return false;
+    }
+
     public function direct() {
         return $this->db;
     }
