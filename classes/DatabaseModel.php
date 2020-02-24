@@ -4,11 +4,56 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     use Traits\Storage;
     protected $tablename;
     protected $fields;
+    protected $changed_fields = [];
 
     protected function __construct()
     {
         $this->tablename = static::getTableName();
         $this->fields = static::getFields();
+    }
+
+    public function wherePrimary() {
+        $db = Database::getInstance()->direct();
+        $primary_keys = [];
+        foreach ($this->fields as $key => $x) {
+            $parts = explode("|", $x);
+            if (in_array("primary", $parts)) {
+                $primary_keys[$key] = $db->real_escape_string($this->data[$key]);
+            }
+        }
+        return implode(static::makePairs($primary_keys), " AND ");
+    }
+
+    public static function makePairs($pairs) {
+        $fields = static::getFields();
+        $output = [];
+        foreach ($pairs as $key => $value) {
+            $x = $fields[$key];
+            $parts = explode("|", $x);
+            if (Database::isStringType(Database::getFieldType($parts))) {
+                $value = "'".$value."'";
+            }
+
+            $output[] = "$key=$value";
+        }
+        return $output;
+    }
+
+    public function save() {
+        $db = Database::getInstance()->direct();
+        $data_to_update = [];
+        foreach ($this->changed_fields as $key => $x) {
+            $data_to_update[$key] = $db->real_escape_string($this->data[$key]); // что если ключа нет в $this->fields ?
+        }
+        $set_string = implode(static::makePairs($data_to_update), ", ");
+        $query = "UPDATE {$this->tablename} SET $set_string WHERE ".$this->wherePrimary();
+        $db->query($query);
+    }
+
+    public function delete() {
+        $db = Database::getInstance()->direct();
+        $query = "DELETE FROM {$this->tablename} WHERE ".$this->wherePrimary();
+        $db->query($query);
     }
 
     public function create() {
@@ -33,7 +78,7 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         $fields = implode(array_keys($data_to_insert), ","); // обернуть имена столбцов в '' ?
         $values = implode($data_to_insert, ",");
         $query = "INSERT INTO {$this->tablename} ($fields) VALUES($values)";
-        $db->query($query);
+        $db->query($query); // TODO: сохранить первичный ключ, если это счётчик
     }
 
     public function jsonSerialize() {
@@ -66,5 +111,12 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     public static function all() {
         $result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName());
         return static::fetch($result);
+    }
+
+    public function offsetSet($offset, $value) {
+        if ($offset !== null) {
+            $this->changed_fields[$offset] = true;
+            $this->data[$offset] = $value;
+        }
     }
 }
