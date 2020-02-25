@@ -15,6 +15,17 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
         case 'getEvents':
             getTasks($_POST['date']);
             break;
+        case 'moveTask':
+            moveTask($_POST['id'], $_POST['date']);
+            break;
+    }
+}
+
+function moveTask($id, $date) {
+    $task = Task::get($id);
+    if ($task !== null) {
+        $task["date"] = $date;
+        $task->save();
     }
 }
 
