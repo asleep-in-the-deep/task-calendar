@@ -30,6 +30,9 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
         case 'editCommentTask':
             editCommentTask($_POST['id'], $_POST['comment']);
             break;
+        case 'setStatusDay':
+            setStatusDay($_POST['date'], $_POST['status']);
+            break;
     }
 }
 
@@ -50,7 +53,7 @@ function renameTask($id, $title) {
 }
 
 function setStatusTask($id, $status) {
-    if (status == 0 || $status == 1) {
+    if ($status == 0 || $status == 1) {
         $task = Task::get($id);
         if ($task !== null) {
             $task["status"] = $status;
@@ -72,6 +75,16 @@ function changeColorTask($id, $color) {
     if ($task !== null) {
         $task["color"] = $color;
         $task->save();
+    }
+}
+
+function setStatusDay($date, $status) {
+    if ($status == 0 || $status == 1) {
+        $day = Day::get($date);
+        if ($day !== null) {
+            $day["status"] = $status;
+            $day->save();
+        }
     }
 }
 
