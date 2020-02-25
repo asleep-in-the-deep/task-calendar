@@ -15,6 +15,9 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
         case 'getEvents':
             getTasks($_POST['date']);
             break;
+        case 'createTask':
+            createTask($_POST['date'], $_POST['title'], $_POST['comment'], $_POST['color']);
+            break;
         case 'moveTask':
             moveTask($_POST['id'], $_POST['date']);
             break;
@@ -34,6 +37,14 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
             setStatusDay($_POST['date'], $_POST['status']);
             break;
     }
+}
+
+function createTask($date, $title, $comment, $color){
+    $task = new Task(["date" => $date,
+                      "title" => $title,
+                      "comment" => $comment,
+                      "color" => $color]);
+    $task->create();
 }
 
 function moveTask($id, $date) {
