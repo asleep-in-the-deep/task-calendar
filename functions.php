@@ -18,6 +18,9 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
         case 'moveTask':
             moveTask($_POST['id'], $_POST['date']);
             break;
+        case 'renameTask':
+            renameTask($_POST['id'], $_POST['title']);
+            break;
     }
 }
 
@@ -25,6 +28,14 @@ function moveTask($id, $date) {
     $task = Task::get($id);
     if ($task !== null) {
         $task["date"] = $date;
+        $task->save();
+    }
+}
+
+function renameTask($id, $title) {
+    $task = Task::get($id);
+    if ($task !== null) {
+        $task["title"] = $title;
         $task->save();
     }
 }
