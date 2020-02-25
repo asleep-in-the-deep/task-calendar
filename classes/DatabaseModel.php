@@ -12,16 +12,38 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         $this->fields = static::getFields();
     }
 
-    public function wherePrimary() {
+    public static function get($value) {
+        $tablename = static::getTableName();
+        $primary_key_array = [];
+        if (is_array($value)) {
+            $primary_key_array = $value;
+        } else {
+            $primary_key_array[Database::getPrimaryKey(static::getFields())] = $value;
+        }
+        $query = "SELECT * FROM `$tablename` WHERE ".static::whereCustomPrimary($primary_key_array);
+        $result = Database::getInstance()->direct()->query($query);
+        $objects = static::fetch($result);
+        if (count($objects) > 0) {
+            return $objects[0];
+        }
+        return null;
+    }
+
+    public static function whereCustomPrimary($data) {
         $db = Database::getInstance()->direct();
+        $fields = static::getFields();
         $primary_keys = [];
-        foreach ($this->fields as $key => $x) {
+        foreach ($fields as $key => $x) {
             $parts = explode("|", $x);
             if (in_array("primary", $parts)) {
-                $primary_keys[$key] = $db->real_escape_string($this->data[$key]);
+                $primary_keys[$key] = $db->real_escape_string($data[$key]);
             }
         }
         return implode(static::makePairs($primary_keys), " AND ");
+    }
+
+    public function wherePrimary() {
+        return static::whereCustomPrimary($this->data);
     }
 
     public static function makePairs($pairs) {
@@ -45,6 +67,8 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         foreach ($this->changed_fields as $key => $x) {
             $data_to_update[$key] = $db->real_escape_string($this->data[$key]); // что если ключа нет в $this->fields ?
         }
+        $this->changed_fields = [];
+
         $set_string = implode(static::makePairs($data_to_update), ", ");
         $query = "UPDATE {$this->tablename} SET $set_string WHERE ".$this->wherePrimary();
         $db->query($query);

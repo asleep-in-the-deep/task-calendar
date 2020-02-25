@@ -29,6 +29,16 @@ class Database extends Singleton
         return null;
     }
 
+    public static function getPrimaryKey($fields){
+        foreach ($fields as $key => $x) {
+            $parts = explode("|", $x);
+            if (in_array("primary", $parts)) {
+                return $key;
+            }
+        }
+        return null;
+    }
+
     public static function isStringType($type){
         if ($type == "varchar" || $type == "text" || $type == "date") {
             return true;
