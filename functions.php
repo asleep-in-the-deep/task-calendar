@@ -84,6 +84,9 @@ function setStatusDay($date, $status) {
         if ($day !== null) {
             $day["status"] = $status;
             $day->save();
+        } else {
+            $day = new Day(["date" => $date, "status" => $status]);
+            $day->create();
         }
     }
 }
