@@ -13,15 +13,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function get($value) {
-        $escaped_tablename = static::getEscapedTableName();
         $primary_key_array = [];
         if (is_array($value)) {
             $primary_key_array = $value;
         } else {
             $primary_key_array[Database::getPrimaryKey(static::getFields())] = $value;
         }
-        $query = "SELECT * FROM `$escaped_tablename` WHERE ".static::whereCustomPrimary($primary_key_array);
-        $result = Database::getInstance()->direct()->query($query);
+        $builder = new QueryBuilder();
+        $result = $builder->select("*")->from(static::getTableName())->where(static::whereCustomPrimary($primary_key_array))->execute();
         $objects = static::fetch($result);
         if (count($objects) > 0) {
             return $objects[0];
@@ -125,15 +124,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function whereDateEq($date) {
-        $escaped_tablename = static::getEscapedTableName();
-        $db = Database::getInstance()->direct();
-        $result = $db->query("SELECT * FROM `$escaped_tablename` WHERE date = '$date'");
+        $builder = new QueryBuilder();
+        $result = $builder->select("*")->from(static::getTableName())->where("date = '$date'")->execute();
         return static::fetch($result);
     }
 
     public static function all() {
-        $escaped_tablename = static::getEscapedTableName();
-        $result = Database::getInstance()->direct()->query("SELECT * FROM `$escaped_tablename`");
+        $builder = new QueryBuilder();
+        $result = $builder->select("*")->from(static::getTableName())->execute();
         return static::fetch($result);
     }
 

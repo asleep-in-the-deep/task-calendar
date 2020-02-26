@@ -15,6 +15,10 @@ class Database extends Singleton
         parent::__construct();
     }
 
+    public static function escape($string){
+        return static::getInstance()->direct()->real_escape_string($string);
+    }
+
     public static function getFieldType($parts){
         $types = ["integer", "date", "boolean", "text", "varchar"];
 
