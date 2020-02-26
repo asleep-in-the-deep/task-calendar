@@ -11,6 +11,7 @@ class Database extends Singleton
         if($this->db->connect_error) {
             die('Connection failed: ' . $this->db->connect_error);
         }
+        $this->db->set_charset('utf8');
         parent::__construct();
     }
 
@@ -37,13 +38,6 @@ class Database extends Singleton
             }
         }
         return null;
-    }
-
-    public static function isStringType($type){
-        if ($type == "varchar" || $type == "text" || $type == "date") {
-            return true;
-        }
-        return false;
     }
 
     public function direct() {

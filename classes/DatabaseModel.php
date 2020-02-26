@@ -13,14 +13,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function get($value) {
-        $tablename = static::getTableName();
+        $escaped_tablename = static::getEscapedTableName();
         $primary_key_array = [];
         if (is_array($value)) {
             $primary_key_array = $value;
         } else {
             $primary_key_array[Database::getPrimaryKey(static::getFields())] = $value;
         }
-        $query = "SELECT * FROM `$tablename` WHERE ".static::whereCustomPrimary($primary_key_array);
+        $query = "SELECT * FROM `$escaped_tablename` WHERE ".static::whereCustomPrimary($primary_key_array);
         $result = Database::getInstance()->direct()->query($query);
         $objects = static::fetch($result);
         if (count($objects) > 0) {
@@ -47,16 +47,9 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function makePairs($pairs) {
-        $fields = static::getFields();
         $output = [];
         foreach ($pairs as $key => $value) {
-            $x = $fields[$key];
-            $parts = explode("|", $x);
-            if (Database::isStringType(Database::getFieldType($parts))) {
-                $value = "'".$value."'";
-            }
-
-            $output[] = "$key=$value";
+            $output[] = "$key='$value'";
         }
         return $output;
     }
@@ -70,13 +63,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         $this->changed_fields = [];
 
         $set_string = implode(static::makePairs($data_to_update), ", ");
-        $query = "UPDATE {$this->tablename} SET $set_string WHERE ".$this->wherePrimary();
+        $escaped_tablename = static::getEscapedTableName();
+        $query = "UPDATE `$escaped_tablename` SET $set_string WHERE ".$this->wherePrimary();
         $db->query($query);
     }
 
     public function delete() {
         $db = Database::getInstance()->direct();
-        $query = "DELETE FROM {$this->tablename} WHERE ".$this->wherePrimary();
+        $query = "DELETE FROM `{$this->tablename}` WHERE ".$this->wherePrimary();
         $db->query($query);
     }
 
@@ -92,16 +86,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
                 return null;
             }
             if ($is_set) {
-                $data_to_insert[$key] = $db->real_escape_string($this->data[$key]);
-                if (Database::isStringType(Database::getFieldType($parts))) {
-                    $data_to_insert[$key] = "'".$data_to_insert[$key]."'";
-                }
+                $data_to_insert["`$key`"] = "'{$db->real_escape_string($this->data[$key])}'";
             }
         }
 
-        $fields = implode(array_keys($data_to_insert), ","); // обернуть имена столбцов в '' ?
+        $fields = implode(array_keys($data_to_insert), ",");
         $values = implode($data_to_insert, ",");
-        $query = "INSERT INTO {$this->tablename} ($fields) VALUES($values)";
+        $escaped_tablename = static::getEscapedTableName();
+        $query = "INSERT INTO `$escaped_tablename` ($fields) VALUES($values)";
         $db->query($query); // TODO: сохранить первичный ключ, если это счётчик
     }
 
@@ -117,6 +109,11 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         return "";
     }
 
+    public static function getEscapedTableName() {
+        $db = Database::getInstance()->direct();
+        return $db->real_escape_string(static::getTableName());
+    }
+
     protected static function fetch($result) {
         $objects = [];
         if ($result->num_rows > 0) {
@@ -128,12 +125,15 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function whereDateEq($date) {
-        $result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName().' WHERE date = "'.$date.'"');
+        $escaped_tablename = static::getEscapedTableName();
+        $db = Database::getInstance()->direct();
+        $result = $db->query("SELECT * FROM `$escaped_tablename` WHERE date = '$date'");
         return static::fetch($result);
     }
 
     public static function all() {
-        $result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName());
+        $escaped_tablename = static::getEscapedTableName();
+        $result = Database::getInstance()->direct()->query("SELECT * FROM `$escaped_tablename`");
         return static::fetch($result);
     }
 
