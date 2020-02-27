@@ -24,11 +24,23 @@ class QueryBuilder
         return $this;
     }
 
+    public function update($tablename) {
+        $this->type = "update";
+        $this->tablename = Database::escape($tablename);
+        return $this;
+    }
+
     public function fields($fields) {
         $this->fields = [];
         foreach ($fields as $key => $value) {
             $this->fields[$key] = "`".Database::escape($value)."`";
         }
+        return $this;
+    }
+
+    public function set($data_to_update) {
+        $set_string = implode(static::makePairs($data_to_update), ", ");
+        $this->values = $set_string;
         return $this;
     }
 
@@ -75,6 +87,22 @@ class QueryBuilder
             }
             $query = "DELETE FROM `$this->tablename`".$complex_where;
             return Database::getInstance()->direct()->query($query);
+        } else if ($this->type === "update") {
+            $complex_where = "";
+            if ($this->where !== null) {
+                $complex_where = " WHERE $this->where";
+            }
+            $query = "UPDATE `$this->tablename` SET $this->values".$complex_where;
+            return Database::getInstance()->direct()->query($query);
         }
+    }
+
+    public static function makePairs($pairs) {
+        $output = [];
+        foreach ($pairs as $key => $value) {
+            $x = Database::escape($value);
+            $output[] = "$key='$x'";
+        }
+        return $output;
     }
 }

@@ -29,28 +29,19 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function whereCustomPrimary($data) {
-        $db = Database::getInstance()->direct();
         $fields = static::getFields();
         $primary_keys = [];
         foreach ($fields as $key => $x) {
             $parts = explode("|", $x);
             if (in_array("primary", $parts)) {
-                $primary_keys[$key] = $db->real_escape_string($data[$key]);
+                $primary_keys[$key] = $data[$key];
             }
         }
-        return implode(static::makePairs($primary_keys), " AND ");
+        return implode(QueryBuilder::makePairs($primary_keys), " AND ");
     }
 
     public function wherePrimary() {
         return static::whereCustomPrimary($this->data);
-    }
-
-    public static function makePairs($pairs) {
-        $output = [];
-        foreach ($pairs as $key => $value) {
-            $output[] = "$key='$value'";
-        }
-        return $output;
     }
 
     public function save() {
@@ -61,10 +52,8 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         }
         $this->changed_fields = [];
 
-        $set_string = implode(static::makePairs($data_to_update), ", ");
-        $escaped_tablename = static::getEscapedTableName();
-        $query = "UPDATE `$escaped_tablename` SET $set_string WHERE ".$this->wherePrimary();
-        $db->query($query);
+        $builder = new QueryBuilder();
+        $builder->update($this->tablename)->set($data_to_update)->where($this->wherePrimary())->execute();
     }
 
     public function delete() {
