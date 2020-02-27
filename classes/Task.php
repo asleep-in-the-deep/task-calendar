@@ -7,7 +7,7 @@ class Task extends DatabaseModel {
     }
 
     public static function getFields() {
-        return ["id" => "primary|integer|default",
+        return ["id" => "primary|integer|default|increment",
                 "date" => "date",
                 "title" => "varchar:255",
                 "color" => "varchar:20|default",

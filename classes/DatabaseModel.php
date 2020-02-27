@@ -73,9 +73,21 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         return true;
     }
 
-    public function create() {
-        $builder = new QueryBuilder();
-        $builder->insert($this->tablename)->fields(array_keys($this->data))->values($this->data)->execute(); // TODO: сохранить первичный ключ, если это счётчик
+    public function create()
+    {
+        if ($this->check()) {
+            $builder = new QueryBuilder();
+            $builder->insert($this->tablename)->fields(array_keys($this->data))->values($this->data)->execute();
+
+            foreach ($this->fields as $key => $value) {
+                $parts = explode("|", $parts);
+
+                if (in_array("increment", $parts) && in_array("primary", $parts)) {
+                    $this->data[$key] = Database::getInstance()->direct()->insert_id;
+                }
+            }
+            $this->changed_fields[] = "";
+        }
     }
 
     public function jsonSerialize() {
@@ -114,8 +126,10 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
 
     public function offsetSet($offset, $value) {
         if ($offset !== null) {
-            $this->changed_fields[$offset] = true;
-            $this->data[$offset] = $value;
+            if (isset($this->fields[$offset])) {
+                $this->changed_fields[$offset] = true;
+                $this->data[$offset] = $value;
+            }
         }
     }
 }
