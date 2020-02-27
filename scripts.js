@@ -20,6 +20,14 @@ function getTasks(date) {
     });
 }
 
+function moveTask(id, date) {
+    $.ajax({
+        type: 'POST',
+        url: 'functions.php',
+        data: 'function=moveTask&date='+date+'&id='+id
+    });
+}
+
 $(document).ready(function(){
     $('.calendar-container').on('change', '.month-select', function () {
         getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
@@ -55,8 +63,11 @@ $(document).ready(function () {
     $('.day').sortable();
     $('.task').draggable({
         containment: '.calendar',
+        helper: 'clone',
+        appendTo: '.calendar',
         scroll: false,
         revert: true,
+        cursor: "move",
         revertDuration: 0});
     $('.day').droppable({
         accept: '.task',
@@ -67,8 +78,15 @@ $(document).ready(function () {
             $(this).removeClass('hover');
         },
         drop: function (event, ui) {
-            $(this).append(ui.draggable);
+            $(this).children('.task-list').prepend(ui.draggable);
             $(this).removeClass('hover');
+            let parts = ui.draggable.prop('id').split("_");
+            if (parts[0] == "task") {
+                let x = $(this).prop('id').split("_");
+                if (x[0] == "day") {
+                    moveTask(parts[1], x[1]);
+                }
+            }
         }
     });
 })

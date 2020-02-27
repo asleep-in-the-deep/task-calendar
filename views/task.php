@@ -1,1 +1,1 @@
-<section class="task <?= $this->classname ?>"><?= $this->title ?></section>
+<section class="task <?= $this->classname ?>" id="task_<?= $this->task_id ?>"><?= $this->title ?></section>

@@ -7,8 +7,8 @@ spl_autoload_register(function ($class) {
 require_once 'config.php';
 require_once 'views/helpers.php';
 
-if (isset($_POST['function']) && !empty($_POST['function'])) {
-    switch($_POST['function']) {
+if (isset($_REQUEST['function']) && !empty($_REQUEST['function'])) {
+    switch($_REQUEST['function']) {
         case 'getCalendar':
             getCalendar($_POST['month'], $_POST['year']);
             break;
@@ -19,7 +19,7 @@ if (isset($_POST['function']) && !empty($_POST['function'])) {
             createTask($_POST['date'], $_POST['title'], $_POST['comment'], $_POST['color']);
             break;
         case 'moveTask':
-            moveTask($_POST['id'], $_POST['date']);
+            moveTask($_REQUEST['id'], $_REQUEST['date']);
             break;
         case 'renameTask':
             renameTask($_POST['id'], $_POST['title']);
