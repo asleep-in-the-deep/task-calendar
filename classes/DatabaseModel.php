@@ -45,10 +45,9 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public function save() {
-        $db = Database::getInstance()->direct();
         $data_to_update = [];
         foreach ($this->changed_fields as $key => $x) {
-            $data_to_update[$key] = $db->real_escape_string($this->data[$key]); // что если ключа нет в $this->fields ?
+            $data_to_update[$key] = $this->data[$key];
         }
         $this->changed_fields = [];
 
@@ -89,11 +88,6 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
 
     public static function getTableName() {
         return "";
-    }
-
-    public static function getEscapedTableName() {
-        $db = Database::getInstance()->direct();
-        return $db->real_escape_string(static::getTableName());
     }
 
     protected static function fetch($result) {
