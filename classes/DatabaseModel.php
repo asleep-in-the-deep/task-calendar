@@ -13,15 +13,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function get($value) {
-        $tablename = static::getTableName();
         $primary_key_array = [];
         if (is_array($value)) {
             $primary_key_array = $value;
         } else {
             $primary_key_array[Database::getPrimaryKey(static::getFields())] = $value;
         }
-        $query = "SELECT * FROM `$tablename` WHERE ".static::whereCustomPrimary($primary_key_array);
-        $result = Database::getInstance()->direct()->query($query);
+        $builder = new QueryBuilder();
+        $result = $builder->select("*")->from(static::getTableName())->where(static::whereCustomPrimary($primary_key_array))->execute();
         $objects = static::fetch($result);
         if (count($objects) > 0) {
             return $objects[0];
@@ -30,79 +29,53 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function whereCustomPrimary($data) {
-        $db = Database::getInstance()->direct();
         $fields = static::getFields();
         $primary_keys = [];
         foreach ($fields as $key => $x) {
             $parts = explode("|", $x);
             if (in_array("primary", $parts)) {
-                $primary_keys[$key] = $db->real_escape_string($data[$key]);
+                $primary_keys[$key] = $data[$key];
             }
         }
-        return implode(static::makePairs($primary_keys), " AND ");
+        return implode(QueryBuilder::makePairs($primary_keys), " AND ");
     }
 
     public function wherePrimary() {
         return static::whereCustomPrimary($this->data);
     }
 
-    public static function makePairs($pairs) {
-        $fields = static::getFields();
-        $output = [];
-        foreach ($pairs as $key => $value) {
-            $x = $fields[$key];
-            $parts = explode("|", $x);
-            if (Database::isStringType(Database::getFieldType($parts))) {
-                $value = "'".$value."'";
-            }
-
-            $output[] = "$key=$value";
-        }
-        return $output;
-    }
-
     public function save() {
-        $db = Database::getInstance()->direct();
         $data_to_update = [];
         foreach ($this->changed_fields as $key => $x) {
-            $data_to_update[$key] = $db->real_escape_string($this->data[$key]); // что если ключа нет в $this->fields ?
+            $data_to_update[$key] = $this->data[$key];
         }
         $this->changed_fields = [];
 
-        $set_string = implode(static::makePairs($data_to_update), ", ");
-        $query = "UPDATE {$this->tablename} SET $set_string WHERE ".$this->wherePrimary();
-        $db->query($query);
+        $builder = new QueryBuilder();
+        $builder->update($this->tablename)->set($data_to_update)->where($this->wherePrimary())->execute();
     }
 
     public function delete() {
-        $db = Database::getInstance()->direct();
-        $query = "DELETE FROM {$this->tablename} WHERE ".$this->wherePrimary();
-        $db->query($query);
+        $builder = new QueryBuilder();
+        $builder->delete()->from($this->tablename)->where($this->wherePrimary())->execute();
     }
 
-    public function create() {
-        $data_to_insert = [];
-        $db = Database::getInstance()->direct();
+    public function check() {
         foreach ($this->fields as $key => $x) {
             $parts = explode("|", $x);
             $is_set = isset($this->data[$key]);
             if (!$is_set && !in_array("default", $parts)){
                 // Поля нет в $data[] и у него нет значения по умолчанию.
                 // База данных выдаст ошибку
-                return null;
-            }
-            if ($is_set) {
-                $data_to_insert[$key] = $db->real_escape_string($this->data[$key]);
-                if (Database::isStringType(Database::getFieldType($parts))) {
-                    $data_to_insert[$key] = "'".$data_to_insert[$key]."'";
-                }
+                return false;
             }
         }
+        return true;
+    }
 
-        $fields = implode(array_keys($data_to_insert), ","); // обернуть имена столбцов в '' ?
-        $values = implode($data_to_insert, ",");
-        $query = "INSERT INTO {$this->tablename} ($fields) VALUES($values)";
-        $db->query($query); // TODO: сохранить первичный ключ, если это счётчик
+    public function create() {
+        $builder = new QueryBuilder();
+        $builder->insert($this->tablename)->fields(array_keys($this->data))->values($this->data)->execute(); // TODO: сохранить первичный ключ, если это счётчик
     }
 
     public function jsonSerialize() {
@@ -128,12 +101,14 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public static function whereDateEq($date) {
-        $result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName().' WHERE date = "'.$date.'"');
+        $builder = new QueryBuilder();
+        $result = $builder->select("*")->from(static::getTableName())->where("date = '$date'")->execute();
         return static::fetch($result);
     }
 
     public static function all() {
-        $result = Database::getInstance()->direct()->query('SELECT * FROM '.static::getTableName());
+        $builder = new QueryBuilder();
+        $result = $builder->select("*")->from(static::getTableName())->execute();
         return static::fetch($result);
     }
 
