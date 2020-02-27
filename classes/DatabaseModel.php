@@ -68,9 +68,8 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     }
 
     public function delete() {
-        $db = Database::getInstance()->direct();
-        $query = "DELETE FROM `{$this->tablename}` WHERE ".$this->wherePrimary();
-        $db->query($query);
+        $builder = new QueryBuilder();
+        $builder->delete()->from($this->tablename)->where($this->wherePrimary())->execute();
     }
 
     public function check() {
