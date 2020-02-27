@@ -73,27 +73,22 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         $db->query($query);
     }
 
-    public function create() {
-        $data_to_insert = [];
-        $db = Database::getInstance()->direct();
+    public function check() {
         foreach ($this->fields as $key => $x) {
             $parts = explode("|", $x);
             $is_set = isset($this->data[$key]);
             if (!$is_set && !in_array("default", $parts)){
                 // Поля нет в $data[] и у него нет значения по умолчанию.
                 // База данных выдаст ошибку
-                return null;
-            }
-            if ($is_set) {
-                $data_to_insert["`$key`"] = "'{$db->real_escape_string($this->data[$key])}'";
+                return false;
             }
         }
+        return true;
+    }
 
-        $fields = implode(array_keys($data_to_insert), ",");
-        $values = implode($data_to_insert, ",");
-        $escaped_tablename = static::getEscapedTableName();
-        $query = "INSERT INTO `$escaped_tablename` ($fields) VALUES($values)";
-        $db->query($query); // TODO: сохранить первичный ключ, если это счётчик
+    public function create() {
+        $builder = new QueryBuilder();
+        $builder->insert($this->tablename)->fields(array_keys($this->data))->values($this->data)->execute(); // TODO: сохранить первичный ключ, если это счётчик
     }
 
     public function jsonSerialize() {
