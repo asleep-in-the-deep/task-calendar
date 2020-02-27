@@ -80,7 +80,7 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
             $builder->insert($this->tablename)->fields(array_keys($this->data))->values($this->data)->execute();
 
             foreach ($this->fields as $key => $value) {
-                $parts = explode("|", $parts);
+                $parts = explode("|", $value);
 
                 if (in_array("increment", $parts) && in_array("primary", $parts)) {
                     $this->data[$key] = Database::getInstance()->direct()->insert_id;

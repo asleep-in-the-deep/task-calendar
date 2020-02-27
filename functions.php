@@ -45,6 +45,7 @@ function createTask($date, $title, $comment, $color){
                       "comment" => $comment,
                       "color" => $color]);
     $task->create();
+    echo json_encode($task);
 }
 
 function moveTask($id, $date) {
