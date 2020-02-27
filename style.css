@@ -101,7 +101,7 @@ body {
     color: #98a0a6;
     position: relative;
     z-index: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .disabled {
