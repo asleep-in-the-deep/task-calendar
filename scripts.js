@@ -4,6 +4,7 @@ function getCalendar(target, month, year) {
         url: 'functions.php',
         data: 'function=getCalendar&month='+month+'&year='+year,
         success:function (html) {
+            clear()
             $('.'+target).html(html)
             onLoad()
         }
@@ -27,6 +28,21 @@ function moveTask(id, date) {
         url: 'functions.php',
         data: 'function=moveTask&date='+date+'&id='+id
     });
+}
+
+function clear() {
+    $('.calendar-container').off();
+    $('.calendar-container').off();
+
+    $('.day-button').off();
+    $('.close-box').off();
+
+    $('.add-task').off();
+    $('.close-box').off();
+
+    $('.day').off();
+    $('.task').off();
+    $('.day').off();
 }
 
 function onLoad() {
