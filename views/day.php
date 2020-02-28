@@ -5,13 +5,13 @@
     <span class="day-number<?= isCurrentDay($this->currentDate)?' current':'' ?>">
 		<?= $this->currentDay ?>
 	</span>
+	<div class="add-task"></div>
 	<div class="task-group">
 	    <?php
 	    getTasks($this->currentDate);
 	    if ($this->day['status'] == 1): ?>
 		<div class="finished"></div>
 	    <?php elseif(!$this->disabled): ?>
-		<div class="add-task"></div>
 	    <?php endif ?>
 	</div>
 </div>
