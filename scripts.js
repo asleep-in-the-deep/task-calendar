@@ -4,7 +4,8 @@ function getCalendar(target, month, year) {
         url: 'functions.php',
         data: 'function=getCalendar&month='+month+'&year='+year,
         success:function (html) {
-            $('.'+target).html(html);
+            $('.'+target).html(html)
+            onLoad()
         }
     });
 }
@@ -28,16 +29,14 @@ function moveTask(id, date) {
     });
 }
 
-$(document).ready(function(){
+function onLoad() {
     $('.calendar-container').on('change', '.month-select', function () {
         getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
     });
     $('.calendar-container').on('change', '.year-select', function () {
         getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
     });
-});
 
-$(document).ready(function () {
     $('.day-button').click(function () {
         $('#change-day').fadeIn();
         $('.blackout').fadeIn();
@@ -46,9 +45,7 @@ $(document).ready(function () {
         $('#change-day').fadeOut();
         $('.blackout').fadeOut();
     });
-});
 
-$(document).ready(function () {
     $('.add-task').click(function () {
         $('#add-task').fadeIn();
         $('.blackout').fadeIn();
@@ -57,9 +54,7 @@ $(document).ready(function () {
         $('#add-task').fadeOut();
         $('.blackout').fadeOut();
     });
-});
 
-$(document).ready(function () {
     $('.day').sortable();
     $('.task').draggable({
         containment: '.calendar',
@@ -89,4 +84,8 @@ $(document).ready(function () {
             }
         }
     });
+}
+
+$(document).ready(function () {
+    onLoad()
 })
