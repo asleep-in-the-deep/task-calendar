@@ -4,8 +4,8 @@
 }
 
 body {
-    /*background: #f5f7fa;*/
-    background: url('https://mota.ru/upload/wallpapers/2017/06/10/19/22/53229/1497111583593c1c1fd83756.40926705.jpg');
+    background-size: cover;
+    background-position: center center;
     padding: 40px 0;
     box-sizing: border-box;
     font-family: Montserrat, "sans-serif";
@@ -38,7 +38,6 @@ body {
 .month-select {
     display: inline-block;
     position: relative;
-    width: 110px;
     font-family: Montserrat;
     font-size: 20px;
     font-weight: 600;
@@ -100,8 +99,8 @@ body {
     box-sizing: border-box;
     color: #98a0a6;
     position: relative;
-    z-index: 0;
-    overflow-y: auto;
+    z-index: 1;
+    overflow-y: scroll;
 }
 
 .disabled {
@@ -111,24 +110,41 @@ body {
     cursor: not-allowed;
 }
 
-.day .hover {
-    background: #f5f7fa;
-}
-
 .day-button {
     display: none;
     position: absolute;
     background: #f5f7fa;
     padding: 2px 5px;
-    top: 7px;
+    top: 10px;
     font-size: 12px;
     border: rgba(0, 0, 0, 0.1) solid 1px;
     border-radius: 10px;
 }
 
-.day:hover .day-button {
+.add-task {
+    display: none;
+    position: absolute;
+    background: url("img/plus.svg") no-repeat;
+    width: 17px;
+    height: 17px;
+    top: 12px;
+    left: 110px;
+}
+
+.day:hover .day-button, .day:hover .add-task {
     display: block;
     cursor: pointer;
+}
+
+.task-group {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+}
+
+.drop-hover {
+    border: 1px dashed lightgray;
 }
 
 .task {
@@ -138,7 +154,7 @@ body {
     margin: 5px;
     border-left-style: solid;
     font-size: 12px;
-    /* z-index: 5; */
+    z-index: 2;
 }
 
 .yellow {
@@ -212,11 +228,10 @@ body {
     background: url('img/tick.svg') no-repeat;
     background-size: cover;
     position: absolute;
-    margin-top: -50px;
     margin-left: 25px;
     width: 80px;
     height: 80px;
-    z-index: 2;
+    z-index: 5;
 }
 
 .current {
@@ -227,13 +242,16 @@ body {
     font-weight: bold;
 }
 
-.add-task {
-    background: url("img/plus.svg") no-repeat;
-    width: 17px;
-    height: 17px;
-    margin-top: 8px;
-    margin-left: 112px;
-    cursor: pointer;
+.blackout {
+    display: none;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.3);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    z-index: 10;
 }
 
 .popup-box {
@@ -244,7 +262,7 @@ body {
     background: #fff;
     padding: 20px;
     border-radius: 10px;
-    z-index: 10;
+    z-index: 15;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -255,8 +273,16 @@ body {
 }
 
 .box-content {
-    margin-top: 20px;
-    font-size: 16px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.box-content p {
+    margin-top: 5px;
+}
+
+p sup {
+    color: darkred;
 }
 
 .close-box {
@@ -271,14 +297,125 @@ body {
     cursor: pointer;
 }
 
-.blackout {
-    display: none;
+.task-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-form input, .task-form textarea {
+    width: 80%;
+    margin: 10px 0 20px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.3);
+    outline: none;
+}
+
+.task-form select {
+    display: inline-block;
+    position: relative;
+    margin: 10px 0 20px;
+    padding: 5px 10px;
+    width: 60%;
+    font-family: Montserrat;
+    font-size: 14px;
+    color: #51565d;
+    background: url(img/down-arrow.svg) #fff no-repeat right 3% bottom 40%;
+    background-size: .6em;
+    border: 1px solid lightgray;
+    box-shadow: 0 2px 4px rgba(0,0,0,.3);
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-button {
+    display: inline-block;
+    width: 40%;
+    margin: 10px 0;
+    padding: 10px;
+    background: #8BC34A;
+    color: #fefefe;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-radius linear 0.2s, width linear 0.2s;
+}
+
+.animate {
+    font-size: 0;
+    border-radius: 100%;
+    width: 80px;
+    height: 80px;
+}
+
+.loader {
+    position: relative;
+    margin: 5px auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #ffffff;
+    background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    -webkit-animation: spin 1.4s infinite linear;
+    animation: spin 1.4s infinite linear;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+}
+.loader:before {
+    width: 50%;
+    height: 50%;
+    background: #ffffff;
+    border-radius: 100% 0 0 0;
     position: absolute;
-    background: rgba(0, 0, 0, 0.3);
     top: 0;
-    bottom: 0;
     left: 0;
+    content: '';
+}
+.loader:after {
+    background: #8BC34A;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
     right: 0;
-    overflow: hidden;
-    z-index: 5;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
