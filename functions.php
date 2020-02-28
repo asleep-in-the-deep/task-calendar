@@ -15,6 +15,9 @@ if (isset($_REQUEST['function']) && !empty($_REQUEST['function'])) {
         case 'getEvents':
             getTasks($_POST['date']);
             break;
+        case 'deleteTask':
+            deleteTask($_POST['id']);
+            break;
         case 'createTask':
             createTask($_POST['date'], $_POST['title'], $_POST['comment'], $_POST['color']);
             break;
@@ -36,6 +39,13 @@ if (isset($_REQUEST['function']) && !empty($_REQUEST['function'])) {
         case 'setStatusDay':
             setStatusDay($_POST['date'], $_POST['status']);
             break;
+    }
+}
+
+function deleteTask($id) {
+    $task = Task::get($id);
+    if ($task !== null) {
+        $task->delete();
     }
 }
 
