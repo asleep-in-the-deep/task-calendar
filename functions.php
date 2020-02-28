@@ -13,10 +13,15 @@ if (isset($_REQUEST['function']) && !empty($_REQUEST['function'])) {
             getCalendar($_POST['month'], $_POST['year']);
             break;
         case 'getEvents':
-            getTasks($_POST['date']);
+            $output = "html";
+            if (isset($_REQUEST['output'])) $output = $_REQUEST['output'];
+            $result = getTasks($_POST['date'], $output);
+            if ($output != "html") {
+                returnJSON($result);
+            }
             break;
         case 'createTask':
-            createTask($_POST['date'], $_POST['title'], $_POST['comment'], $_POST['color']);
+            returnJSON(createTask($_REQUEST['date'], $_REQUEST['title'], $_REQUEST['comment'], $_REQUEST['color']));
             break;
         case 'moveTask':
             moveTask($_REQUEST['id'], $_REQUEST['date']);
@@ -36,7 +41,16 @@ if (isset($_REQUEST['function']) && !empty($_REQUEST['function'])) {
         case 'setStatusDay':
             setStatusDay($_POST['date'], $_POST['status']);
             break;
+        default:
+            returnJSON(["status" => "error"]);
     }
+} else if ($_SERVER["SCRIPT_NAME"] == "/functions.php"){
+    returnJSON(["status" => "error"]);
+}
+
+function returnJSON($data) {
+    header("Content-Type: application/json; charset=utf-8");
+    echo json_encode($data);
 }
 
 function createTask($date, $title, $comment, $color){
@@ -45,7 +59,7 @@ function createTask($date, $title, $comment, $color){
                       "comment" => $comment,
                       "color" => $color]);
     $task->create();
-    echo json_encode($task);
+    return ["status" => "ok", "response" => $task];
 }
 
 function moveTask($id, $date) {
@@ -103,10 +117,15 @@ function setStatusDay($date, $status) {
     }
 }
 
-function getTasks($date) {
+function getTasks($date, $output = "html") {
     $tasks = Task::whereDateEq($date);
-    $view = new Views\Tasks($tasks);
-    $view->render();
+    if ($output == "html") {
+        $view = new Views\Tasks($tasks);
+        $view->render();
+    } else {
+        return ["status" => "ok", "response" => $tasks];
+    }
+    return null;
 }
 
 function getCalendar($month = '', $year = '') {
