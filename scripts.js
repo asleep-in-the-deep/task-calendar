@@ -84,6 +84,23 @@ function onLoad() {
             }
         }
     });
+    
+    let month = $('.month-select option:selected').attr('value');
+    let selectBox = $('.month-select');
+
+    if (month == '01' || month == '04' || month == '11') {
+        selectBox.css('width', '90px');
+    } else if (month == '02' || month == '09') {
+        selectBox.css('width', '110px');
+    } else if (month == '03' || month == '06' || month == '07') {
+        selectBox.css('width', '70px');
+    } else if (month == '05') {
+        selectBox.css('width', '60px');
+    } else if (month == '08') {
+        selectBox.css('width', '80px');
+    } else if (month == '10' || month == '12') {
+        selectBox.css('width', '100px')
+    }
 }
 
 $(document).ready(function () {
