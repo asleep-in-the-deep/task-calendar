@@ -244,7 +244,7 @@ body {
 
 .blackout {
     display: none;
-    position: absolute;
+    position: fixed;
     background: rgba(0, 0, 0, 0.3);
     top: 0;
     bottom: 0;
