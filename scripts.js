@@ -65,7 +65,18 @@ function formatDate(date) {
 }
 
 function getChangeDayContent() {
-    let content = '<div class="box-content"><p>Список задач, изменить задачу, добавить, выходной/зак день</p></div>';
+    let boxOpen = '<div class="box-content"><p>Задачи на сегодня</p>';
+    let tasks = '<section class="task yellow">Работа над календарем<div class="edit-task"></div><div class="delete-task"></div></section>' +
+        '<section class="task blue">Работа над лабами<div class="edit-task"></div><div class="delete-task"></div></section>';
+    let add = '<div class="box-add"><div class="add-task"></div>Добавить задачу</div>';
+    let dayStatus = '<select name="color" id="color">' +
+        '<option>Рабочий день</option>' +
+        '<option value="1">День закончен</option>' +
+        '<option value="0">Выходной</option>' +
+        '</select>';
+    let button = '<button type="submit">Обновить</button>'
+    let boxClose = '</div>';
+    let content = boxOpen + tasks + add + dayStatus + button + boxClose;
     return content;
 }
 
