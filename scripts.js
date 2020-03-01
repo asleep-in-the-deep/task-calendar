@@ -47,7 +47,7 @@ function addTask() {
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url: 'add-task.php',
+            url: 'functions.php?function=createTask',
             data: $('.task-form').serialize(),
             beforeSend: function () {
                 $('.form-button').addClass('animate').append('<div class="loader"></div>');
