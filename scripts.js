@@ -64,59 +64,14 @@ function formatDate(date) {
     return result;
 }
 
-function getChangeDayContent() {
-    let boxOpen = '<div class="box-content"><p>Задачи на сегодня</p>';
-    let tasks = '<section class="task yellow">Работа над календарем<div class="edit-task"></div><div class="delete-task"></div></section>' +
-        '<section class="task blue">Работа над лабами<div class="edit-task"></div><div class="delete-task"></div></section>';
-    let add = '<div class="box-add"><div class="add-task"></div>Добавить задачу</div>';
-    let dayStatus = '<select name="color" id="color">' +
-        '<option>Рабочий день</option>' +
-        '<option value="1">День закончен</option>' +
-        '<option value="0">Выходной</option>' +
-        '</select>';
-    let button = '<button type="submit">Обновить</button>'
-    let boxClose = '</div>';
-    let content = boxOpen + tasks + add + dayStatus + button + boxClose;
-    return content;
-}
-
-function getAddTaskContent(date) {
-    let boxOpen = '<div class="box-content">';
-    let options = '<option value="yellow">Желтый 🐥</option>' +
-        '<option value="orange">Оранжевый 🦊</option>' +
-        '<option value="red">Красный 🍓</option>' +
-        '<option value="blue">Синий 🦋</option>' +
-        '<option value="sky">Голубой 🐬</option>' +
-        '<option value="green">Зеленый 🐸</option>' +
-        '<option value="sea">Морской 🌊</option>' +
-        '<option value="purple">Фиолетовый 🔮</option>' +
-        '<option value="pink">Розовый 🐷</option>' +
-        '<option value="brown">Коричневый 🐻</option>';
-    let form = '<form class="task-form">' +
-        '<p>Название задачи <sup>*</sup></p>' +
-        '<input type="text" name="title">' +
-        '<p>Цвет задачи <sup>*</sup></p>' +
-        '<select name="color">' + options + '</select>' +
-        '<p>Комментарий</p>' +
-        '<textarea name="comment"></textarea>' +
-        '<input type="hidden" name="date" value="' + date + '">' +
-        '<button type="submit" class="form-button">Добавить</button>' +
-        '</form>';
-    let boxClose = '</div>';
-
-    let content = boxOpen + form + boxClose;
-    return content;
-}
-
-function popupAnimate() {
-    $('.popup-box').fadeIn();
-    $('.blackout').fadeIn();
+function popupAnimate(popup) {
+    $(popup).fadeIn()
+    $('.blackout').fadeIn()
 
     $('.close-box').click(function() {
-        $('.popup-box').fadeOut();
-        $('.blackout').fadeOut();
-        $('.blackout').remove();
-    });
+        $(popup).fadeOut()
+        $('.blackout').fadeOut()
+});
 }
 
 function clear() {
@@ -136,31 +91,18 @@ function onLoad() {
     });
 
     $('.day-button').click(function () {
-        $(document.body).append('<div class="blackout"></div>');
-        $('.blackout').append('<div class="popup-box" id="change-day"></div>');
-
-        let date = $(this).parent().attr('data-date');
-        let heading = '<h2 class="box-top">Изменить задачи ' + formatDate(date) + '</h2>';
-        let close = '<div class="close-box">x</div>';
-
-        $('#change-day').append(heading + close + getChangeDayContent());
-
-        popupAnimate();
+        let date = $(this).parent().attr('data-date')
+        $("#change-day > .box-top").html('Изменить задачи ' + formatDate(date))
+        popupAnimate('#change-day')
     });
 
     $('.add-task').click(function () {
-        $(document.body).append('<div class="blackout"></div>');
-        $('.blackout').append('<div class="popup-box" id="add-task"></div>');
+        let date = $(this).parent().attr('data-date')
+        $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date))
 
-        let date = $(this).parent().attr('data-date');
-        let heading = '<h2 class="box-top">Добавить задачу на ' + formatDate(date) + '</h2>';
-        let close = '<div class="close-box">x</div>';
+        addTask()
 
-        $('#add-task').append(heading + close + getAddTaskContent(date));
-
-        addTask();
-
-        popupAnimate();
+        popupAnimate('#add-task')
     });
 
     $('.task').draggable({
