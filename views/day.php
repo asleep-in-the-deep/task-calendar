@@ -1,4 +1,4 @@
-<div class="day <?= $this->disabled?' disabled':'' ?>" data-date="<?= $this->currentDate ?>">
+<div class="day <?= $this->disabled?' disabled':'' ?>" data-date="<?= $this->currentDate ?>" id="day_<?= $this->currentDate ?>">
 	<?php if (!$this->disabled): ?>
         <div class="day-button">Изменить</div>
 	<?php endif ?>

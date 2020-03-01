@@ -42,6 +42,7 @@ function moveTask(id, date) {
 }
 
 function addTask() {
+    $('.task-form').off()
     $('.task-form').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
@@ -64,12 +65,25 @@ function addTask() {
 }
 
 function setStatusDay(date) {
+    $('#day-form').off()
     $('#day-form').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
             type: 'POST',
             url: 'functions.php?function=setStatusDay',
-            data: {'date': date, 'status': $("#day-form > #status").val()} // использовать $('#day-form').serialize() ?
+            data: {'date': date, 'status': $("#day-form > #status").val()}, // использовать $('#day-form').serialize() ?
+            success: function (html) {
+                let status = $("#day-form > #status").val()
+                let day_block = $("#day_"+date)
+                if (status == 0) {
+                    day_block.addClass("disabled")
+                } else if (status == 1) {
+                    day_block.children(".task-group").append('<div class="finished"></div>');
+                } else if (status == -1) {
+                    day_block.removeClass("disabled")
+                    $("#day_" + date + " > .task-group > .finished").remove()
+                }
+            }
         })
     })
 }
