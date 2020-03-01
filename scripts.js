@@ -128,6 +128,17 @@ function clear() {
     $('.task').off();
 }
 
+function HandleAddTask() {
+    let date = $(this).parent().attr('data-date')
+    $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date))
+    $("#add-task-date").val(date)
+
+    addTask()
+
+    $('#change-day').css("display", "none")
+    popupAnimate('#add-task', '#change-day')
+}
+
 function onLoad() {
     $('.calendar-container').on('change', '.month-select', function () {
         getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
@@ -142,16 +153,7 @@ function onLoad() {
         $(".tasks-in").html('Задачи на ' + formatDate(date))
 
         $("#change-day > .box-content > .box-add").attr('data-date', date);
-        $('#change-day > .box-content > .box-add > .add-task').off().click(function () {
-            let date = $(this).parent().attr('data-date')
-            $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date))
-            $("#add-task-date").val(date)
-
-            addTask()
-
-            $('#change-day').css("display", "none")
-            popupAnimate('#add-task', '#change-day')
-        });
+        $('#change-day > .box-content > .box-add > .add-task').off().click(HandleAddTask);
 
         setStatusDay(date);
 
@@ -159,15 +161,7 @@ function onLoad() {
         loadTasks(date)
     });
 
-    $('.day > .add-task').click(function () {
-        let date = $(this).parent().attr('data-date')
-        $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date))
-        $("#add-task-date").val(date)
-
-        addTask()
-
-        popupAnimate('#add-task')
-    });
+    $('.day > .add-task').click(HandleAddTask);
 
     $('.task').draggable({
         containment: '.calendar',
