@@ -106,12 +106,16 @@ function changeColorTask($id, $color) {
 }
 
 function setStatusDay($date, $status) {
-    if ($status == 0 || $status == 1) {
+    if ($status == 0 || $status == 1 || $status==-1) {
         $day = Day::get($date);
         if ($day !== null) {
             $day["status"] = $status;
-            $day->save();
-        } else {
+            if ($status == -1) {
+                $day->delete();
+            } else {
+                $day->save();
+            }
+        } else if ($status != -1) {
             $day = new Day(["date" => $date, "status" => $status]);
             $day->create();
         }

@@ -63,6 +63,17 @@ function addTask() {
     });
 }
 
+function setStatusDay(date) {
+    $('#day-form').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: 'functions.php?function=setStatusDay',
+            data: {'date': date, 'status': $("#day-form > #status").val()} // использовать $('#day-form').serialize() ?
+        })
+    })
+}
+
 function formatDate(date) {
     let monthArray = new Array('января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря');
 
@@ -82,7 +93,7 @@ function popupAnimate(popup) {
     $('.close-box').click(function() {
         $(popup).fadeOut()
         $('.blackout').fadeOut()
-});
+    });
 }
 
 function clear() {
@@ -105,6 +116,9 @@ function onLoad() {
         let date = $(this).parent().attr('data-date')
         $("#change-day > .box-top").html('Изменить задачи ' + formatDate(date))
         $(".tasks-in").html('Задачи на ' + formatDate(date))
+
+        setStatusDay(date);
+
         popupAnimate('#change-day')
         loadTasks(date)
     });

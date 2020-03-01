@@ -23,12 +23,14 @@
                 <div id="change-day-list">
                 </div>
                 <div class="box-add"><div class="add-task"></div>Добавить задачу</div>
-                <select name="color" id="color">
-                    <option>Рабочий день</option>
-                    <option value="1">День закончен</option>
-                    <option value="0">Выходной</option>
-                </select>
-                <button type="submit">Обновить</button>
+                <form id="day-form">
+                    <select name="status" id="status">
+                        <option value="-1">Рабочий день</option>
+                        <option value="1">День закончен</option>
+                        <option value="0">Выходной</option>
+                    </select>
+                    <button type="submit">Обновить</button>
+                </form>
             </div>
         </div>
         <div class="popup-box" id="add-task">
