@@ -235,11 +235,14 @@ body {
 }
 
 .current {
-    background: rgba(255, 66, 0, 0.7);
+    display: inline-block;
+    width: 15px;
     padding: 5px;
     border-radius: 100%;
-    color: white;
+    text-align: center;
     font-weight: bold;
+    background: rgba(255, 66, 0, 0.7);
+    color: white;
 }
 
 .blackout {
