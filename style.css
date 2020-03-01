@@ -354,6 +354,37 @@ p sup {
     transition: border-radius linear 0.2s, width linear 0.2s;
 }
 
+.edit-task {
+    position: absolute;
+    background: url('img/settings.svg') no-repeat;
+    width: 17px;
+    height: 17px;
+    top: 2px;
+    right: 25px;
+    cursor: pointer;
+}
+
+.delete-task {
+    position: absolute;
+    background: url('img/delete.svg') no-repeat;
+    width: 17px;
+    height: 17px;
+    top: 2px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.box-add {
+    padding-left: 20px;
+    margin: 10px 0 20px;
+}
+
+.box-add .add-task {
+    display: inline-block;
+    left: 20px;
+    top: unset;
+}
+
 .animate {
     font-size: 0;
     border-radius: 100%;
