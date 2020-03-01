@@ -19,11 +19,9 @@
             <h2 class="box-top"></h2>
             <div class="close-box">x</div>
             <div class="box-content">
-                <p>Задачи на сегодня</p>
-                <section class="task yellow">Работа над календарем
-                    <div class="edit-task"></div><div class="delete-task"></div>
-                </section>
-                <section class="task blue">Работа над лабами<div class="edit-task"></div><div class="delete-task"></div></section>
+                <p class="tasks-in"></p>
+                <div id="change-day-list">
+                </div>
                 <div class="box-add"><div class="add-task"></div>Добавить задачу</div>
                 <select name="color" id="color">
                     <option>Рабочий день</option>

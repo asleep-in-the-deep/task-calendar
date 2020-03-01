@@ -22,6 +22,17 @@ function getTasks(date) {
     });
 }
 
+function loadTasks(date) {
+    $.ajax({
+        type: 'POST',
+        url: 'functions.php',
+        data: 'function=loadTasks&date='+date,
+        success:function (html) {
+            $('#change-day-list').html(html);
+        }
+    });
+}
+
 function moveTask(id, date) {
     $.ajax({
         type: 'POST',
@@ -93,7 +104,9 @@ function onLoad() {
     $('.day-button').click(function () {
         let date = $(this).parent().attr('data-date')
         $("#change-day > .box-top").html('Изменить задачи ' + formatDate(date))
+        $(".tasks-in").html('Задачи на ' + formatDate(date))
         popupAnimate('#change-day')
+        loadTasks(date)
     });
 
     $('.add-task').click(function () {

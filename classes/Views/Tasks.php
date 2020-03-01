@@ -22,4 +22,18 @@ class Tasks
             require "views/task.php";
         }
     }
+
+    public function renderEditor()
+    {
+        if (count($this->internal) > 0) {
+            foreach ($this->internal as $k => $task) {
+                $this->classname = ($task['status'] == 0) ? $task['color'] : "done";
+                $this->title = $task["title"];
+                $this->task_id = $task['id'];
+                require "views/task-in-editor.php";
+            }
+        } else {
+            echo "Задачи не найдены.";
+        }
+    }
 }

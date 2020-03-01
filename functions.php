@@ -1,5 +1,7 @@
 <?php
 
+use Views\Tasks;
+
 spl_autoload_register(function ($class) {
     include 'classes/' . str_replace('\\', '/', $class) . '.php';
 });
@@ -14,6 +16,9 @@ if (isset($_REQUEST['function']) && !empty($_REQUEST['function'])) {
             break;
         case 'getEvents':
             getTasks($_POST['date']);
+            break;
+        case 'loadTasks':
+            loadTasks($_POST['date']);
             break;
         case 'deleteTask':
             deleteTask($_POST['id']);
@@ -117,6 +122,12 @@ function getTasks($date) {
     $tasks = Task::whereDateEq($date);
     $view = new Views\Tasks($tasks);
     $view->render();
+}
+
+function loadTasks($date) {
+    $tasks = Task::whereDateEq($date);
+    $view = new Views\Tasks($tasks);
+    $view->renderEditor();
 }
 
 function getCalendar($month = '', $year = '') {
