@@ -145,6 +145,7 @@ function onLoad() {
         $('#change-day > .box-content > .box-add > .add-task').off().click(function () {
             let date = $(this).parent().attr('data-date')
             $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date))
+            $("#add-task-date").val(date)
 
             addTask()
 
@@ -161,6 +162,7 @@ function onLoad() {
     $('.day > .add-task').click(function () {
         let date = $(this).parent().attr('data-date')
         $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date))
+        $("#add-task-date").val(date)
 
         addTask()
 

@@ -54,7 +54,7 @@
                     </select>
                     <p>Комментарий</p>
                     <textarea name="comment"></textarea>
-                    <input type="hidden" name="date" value="2020-03-4">
+                    <input type="hidden" name="date" id="add-task-date">
                     <button type="submit" class="form-button">Добавить</button>
                 </form>
             </div>
