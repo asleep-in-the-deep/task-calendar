@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru_RU">
     <head>
         <title>Календарь задач</title>
         <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
@@ -8,6 +8,21 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="scripts.js"></script>
+        <?php
+        if (UseEmojiHook()) {
+        ?>
+        <style>
+            @font-face {
+                font-family: "Emoji Font";
+                src: url("emojione-android.ttf") format("truetype");
+            }
+            select, option {
+                font-family: "Emoji Font", Montserrat, serif, "sans-serif" !important;
+            }
+        </style>
+        <?php
+        }
+        ?>
     </head>
     <body>
         <div class="calendar-container">

@@ -17,3 +17,5 @@ $config["db_host"] = $dbHost;
 $config["db_user"] = $dbUsername;
 $config["db_pass"] = $dbPassword;
 $config["db_name"] = $dbName;
+
+$config["emoji"] = "native"; // android, native

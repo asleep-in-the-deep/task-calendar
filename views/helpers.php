@@ -1,4 +1,13 @@
 <?php
+
+function UseEmojiHook() {
+    $config = Config::getInstance();
+
+    if (!isset($config["emoji"])) return false;
+    if ($config["emoji"] == "native") return false;
+    return true;
+}
+
 function getYearList($selected = '') {
     $years = '';
     $minYear = 2019;
