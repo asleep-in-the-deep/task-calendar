@@ -163,14 +163,14 @@ function HandleChangeTask(current) {
     let hours = $(current).next('.task-hours').text();
 
     $('#change-task input[name=title]').val(title);
-    $('#change-task select[name=color]').val(color);
+    $('#change-task select[name=color]').val(color).change();
     $('#change-task input[name=hours]').val(hours);
     if ($(current).parent().attr('class').split(' ')[1] == 'done') {
         $('#change-task select[name=status]').val('1');
     } else {
         $('#change-task select[name=status]').val('0');
     }
-    $('#task-id').val(id);
+    $('#task-id').val(id.split('_')[1]);
 
     changeTask();
     deleteTask();

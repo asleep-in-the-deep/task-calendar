@@ -24,7 +24,10 @@ if (isset($_REQUEST['function']) && !empty($_REQUEST['function'])) {
             deleteTask($_POST['id']);
             break;
         case 'createTask':
-            createTask($_POST['date'], $_POST['title'], $_POST['comment'], $_POST['color']);
+            createTask($_POST['date'], $_POST['title'], $_POST['hours'], $_POST['color']);
+            break;
+        case 'changeTask':
+            changeTask($_POST['id'], $_POST['title'], $_POST['hours'], $_POST['color'], $_POST['status']);
             break;
         case 'moveTask':
             moveTask($_REQUEST['id'], $_REQUEST['date']);
@@ -54,11 +57,23 @@ function deleteTask($id) {
     }
 }
 
-function createTask($date, $title, $comment, $color){
+function changeTask($id, $title, $hours, $color, $status) {
+    $task = Task::get($id);
+    if ($task !== null) {
+        $task["title"] = $title;
+        $task["hours"] = $hours;
+        $task["color"] = $color;
+        $task["status"] = $status;
+        $task->save();
+    }
+    echo json_encode($task);
+}
+
+function createTask($date, $title, $hours, $color) {
     $task = new Task(["date" => $date,
-                      "title" => $title,
-                      "comment" => $comment,
-                      "color" => $color]);
+        "title" => $title,
+        "hours" => $hours,
+        "color" => $color]);
     $task->create();
     echo json_encode($task);
 }

@@ -99,7 +99,7 @@
                         </select>
                         <p>Изменить время</p>
                         <input type="number" step="any" name="hours">
-                        <select name="status">
+                        <select name="status" class="emoji">
                             <option value="0" class="emoji">Задача в работе 👀</option>
                             <option value="1" class="emoji">Задача выполнена ✅</option>
                         </select>

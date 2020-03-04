@@ -19,6 +19,7 @@ class Tasks
             $this->classname = ($task['status'] == 0) ? $task['color']:"done";
             $this->title = $task["title"];
             $this->task_id = $task['id'];
+			$this->hours = $task["hours"];
             require "views/task.php";
         }
     }
@@ -30,6 +31,7 @@ class Tasks
                 $this->classname = ($task['status'] == 0) ? $task['color'] : "done";
                 $this->title = $task["title"];
                 $this->task_id = $task['id'];
+				$this->hours = $task["hours"];
                 require "views/task-in-editor.php";
             }
         } else {

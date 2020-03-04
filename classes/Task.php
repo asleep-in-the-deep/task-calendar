@@ -11,7 +11,7 @@ class Task extends DatabaseModel {
                 "date" => "date",
                 "title" => "varchar:255",
                 "color" => "varchar:20|default",
-                "comment" => "text",
+                "hours" => "float",
                 "status" => "boolean|default"];
     }
 
