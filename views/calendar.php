@@ -1,6 +1,7 @@
 <div class="calendar-header">
     <h1><select class="month-select"><?= getAllMonths($this->dateMonth) ?></select></h1>
     <select class="year-select"><?= getYearList($this->dateYear) ?></select>
+    <div class="color-desc"></div>
 </div>
 <div class="calendar">
     <span class="day-name">Пн</span>
