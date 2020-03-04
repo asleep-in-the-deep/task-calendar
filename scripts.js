@@ -4,31 +4,9 @@ function getCalendar(target, month, year) {
         url: 'functions.php',
         data: 'function=getCalendar&month='+month+'&year='+year,
         success:function (html) {
-            clear()
-            $('.'+target).html(html)
-            onLoad()
-        }
-    });
-}
-
-function getTasks(date) {
-    $.ajax({
-        type: 'POST',
-        url: 'functions.php',
-        data: 'function=getTasks&date='+date,
-        success:function (html) {
-            $('#task-list').html(html);
-        }
-    });
-}
-
-function loadTasks(date) {
-    $.ajax({
-        type: 'POST',
-        url: 'functions.php',
-        data: 'function=loadTasks&date='+date,
-        success:function (html) {
-            $('#change-day-list').html(html);
+            clear();
+            $('.'+target).html(html);
+            onLoad();
         }
     });
 }
@@ -37,12 +15,17 @@ function moveTask(id, date) {
     $.ajax({
         type: 'POST',
         url: 'functions.php',
-        data: 'function=moveTask&date='+date+'&id='+id
+        data: 'function=moveTask&id='+id+'&date='+date,
+        success:function (html) {
+            clear();
+            getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
+            onLoad();
+        }
     });
 }
 
 function addTask() {
-    $('.task-form').off()
+    $('.task-form').off();
     $('.task-form').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
@@ -52,10 +35,10 @@ function addTask() {
             beforeSend: function () {
                 $('.form-button').addClass('animate').append('<div class="loader"></div>');
             },
-            success: function (html) {
+            success: function () {
                 $('.loader').remove();
                 $('.form-button').removeClass('animate');
-                $('.box-content').append('<p>Добавлено!</p>');
+                $('#add-task .box-content').append('<p class="answer">Добавлено!</p>');
                 clear();
                 getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
                 onLoad();
@@ -64,28 +47,88 @@ function addTask() {
     });
 }
 
+function loadTasks(date) {
+    $.ajax({
+        type: 'POST',
+        url: 'functions.php',
+        data: 'function=loadTasks&date='+date,
+        success: function (html) {
+            $('.change-day-list').html(html);
+        }
+    });
+}
+
 function setStatusDay(date) {
-    $('#day-form').off()
-    $('#day-form').on('submit', function (e) {
+    $('.day-form').off();
+    $('.day-form').submit(function (e) {
         e.preventDefault();
         $.ajax({
             type: 'POST',
             url: 'functions.php?function=setStatusDay',
-            data: {'date': date, 'status': $("#day-form > #status").val()}, // использовать $('#day-form').serialize() ?
-            success: function (html) {
-                let status = $("#day-form > #status").val()
-                let day_block = $("#day_"+date)
+            data: {
+                'date': date,
+                'status': $('.day-form > #status').val()
+            },
+            success: function () {
+                $('#change-day .box-content').append('<p class="answer">День изменен!</p>');
+                let status = $('.day-form > #status').val();
+                let day = $('.day[data-date="' + date + '"]');
                 if (status == 0) {
-                    day_block.addClass("disabled")
+                    day.addClass('disabled');
                 } else if (status == 1) {
-                    day_block.children(".task-group").append('<div class="finished"></div>');
+                    day.append('<div class="finished"></div>');
                 } else if (status == -1) {
-                    day_block.removeClass("disabled")
-                    $("#day_" + date + " > .task-group > .finished").remove()
+                    day.removeClass('disabled');
+                    $('.day[data-date="' + date + '"] .finished').remove();
                 }
             }
         })
-    })
+    });
+}
+
+function changeTask() {
+    $('.change-form').off();
+    $('.change-form').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: 'functions.php?function=changeTask',
+            data: $('.change-form').serialize(),
+            beforeSend: function () {
+                $('.change-button').addClass('animate').append('<div class="loader"></div>');
+            },
+            success: function () {
+                $('.loader').remove();
+                $('.change-button').removeClass('animate');
+                $('#change-task .box-content').append('<p class="answer">Задача изменена!</p>');
+                clear();
+                getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
+                onLoad();
+            }
+        })
+    });
+}
+
+function deleteTask() {
+    $('.delete-button').off();
+    $('.delete-button').click(function (e) {
+       e.preventDefault();
+       $.ajax({
+           type: 'POST',
+           url: 'functions.php?function=deleteTask',
+           data: $('.change-form').serialize(),
+           success: function () {
+               $('#change-task .box-content').append('<p class="answer">Задача удалена!</p>');
+               clear();
+               getCalendar('calendar-container', $('.month-select').val(), $('.year-select').val());
+               onLoad();
+               setTimeout(function() {
+                       $('#change-task').fadeOut();
+                       $('.blackout').fadeOut();
+                   }, 2000);
+           }
+       })
+    });
 }
 
 function formatDate(date) {
@@ -100,41 +143,63 @@ function formatDate(date) {
     return result;
 }
 
-function popupAnimate(popup, return_to = null) {
-    $(popup).fadeIn()
-    $('.blackout').fadeIn()
+function HandleAddTask(current, returnTo = null) {
+    let date = $(current).parent().attr('data-date');
+    $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date));
+    $("#add-task-date").val(date);
 
-    $('.close-box').off()
+    addTask();
+
+    $('#change-day').css("display", "none");
+    popupAnimate('#add-task', returnTo);
+}
+
+function HandleChangeTask(current) {
+    $("#change-task > .box-top").html('Изменить задачу');
+
+    let id = $(current).parent().attr('id');
+    let title = $(current).prev('span').text();
+    let color = $(current).parent().attr('class').split(' ')[1];
+    let hours = $(current).next('.task-hours').text();
+
+    $('#change-task input[name=title]').val(title);
+    $('#change-task select[name=color]').val(color);
+    $('#change-task input[name=hours]').val(hours);
+    if ($(current).parent().attr('class').split(' ')[1] == 'done') {
+        $('#change-task select[name=status]').val('1');
+    } else {
+        $('#change-task select[name=status]').val('0');
+    }
+    $('#task-id').val(id);
+
+    changeTask();
+    deleteTask();
+
+    let returnTo = '#change-day';
+    $('#change-day').css("display", "none");
+    popupAnimate('#change-task', returnTo);
+}
+
+function popupAnimate(popup, returnTo = null) {
+    $(popup).fadeIn();
+    $('.blackout').fadeIn();
+
+    $('.close-box').off();
 
     $('.close-box').click(function() {
-        if (return_to === null) {
-            $(popup).fadeOut()
-            $('.blackout').fadeOut()
+        $('.answer').remove();
+        $('.task-form')[0].reset();
+        if (returnTo === null) {
+            $(popup).fadeOut();
+            $('.blackout').fadeOut();
         } else {
-            $(popup).css("display", "none")
-            $(return_to).fadeIn()
-            popupAnimate(return_to)
+            $(popup).css("display", "none");
+            let date = $(returnTo + ' .box-content').attr('data-date');
+            loadTasks(date);
+            $(returnTo).fadeIn();
+            popupAnimate(returnTo);
         }
     });
-}
-
-function clear() {
-    $('.calendar-container').off();
-    $('.calendar-container').off();
-
-    $('.day').off();
-    $('.task').off();
-}
-
-function HandleAddTask(current, return_to = null) {
-    let date = $(current).parent().attr('data-date')
-    $("#add-task > .box-top").html('Добавить задачу на ' + formatDate(date))
-    $("#add-task-date").val(date)
-
-    addTask()
-
-    $('#change-day').css("display", "none")
-    popupAnimate('#add-task', return_to)
 }
 
 function onLoad() {
@@ -146,23 +211,30 @@ function onLoad() {
     });
 
     $('.day-button').click(function () {
-        let date = $(this).parent().attr('data-date')
-        $("#change-day > .box-top").html('Изменить задачи ' + formatDate(date))
-        $(".tasks-in").html('Задачи на ' + formatDate(date))
+        let date = $(this).parent().attr('data-date');
+        $('#change-day > .box-top').html('Изменить задачи на ' + formatDate(date));
+        $('#change-day > .box-content').attr('data-date', date);
 
-        $("#change-day > .box-content > .box-add").attr('data-date', date);
-        $('#change-day > .box-content > .box-add > .add-task').off().click(function () {
-            HandleAddTask(this,'#change-day')
+        $('.box-add').click(function () {
+            HandleAddTask(this,'#change-day');
         });
 
         setStatusDay(date);
 
-        popupAnimate('#change-day')
-        loadTasks(date)
+        popupAnimate('#change-day');
+        loadTasks(date);
     });
 
     $('.day > .add-task').click(function () {
-        HandleAddTask(this)
+        HandleAddTask(this);
+    });
+
+    $(document).on('click','.task > .edit-task', function(){
+        HandleChangeTask(this);
+    });
+
+    $('.color-desc').click(function () {
+        popupAnimate('#color-description');
     });
 
     $('.task').draggable({
@@ -183,13 +255,9 @@ function onLoad() {
         drop: function (event, ui) {
             $(this).append(ui.draggable);
             $(this).removeClass('drop-hover');
-            let taskElementId = ui.draggable.attr('id');
+            let taskId = ui.draggable.attr('id');
             let date = $(this).parent().attr('data-date');
-            let parts = taskElementId.split("_");
-            if (parts[0] == "task") {
-                let taskId = parts[1];
-                moveTask(taskId, date);
-            }
+            moveTask(taskId, date);
         }
     });
 
@@ -236,6 +304,16 @@ function onLoad() {
     }
 }
 
+function clear() {
+    $('.calendar-container').off();
+    $('.form-button').off();
+
+    $('#change-task input[type=checkbox]').prop('checked', false);
+
+    $('.day').off();
+    $('.task').off();
+}
+
 $(document).ready(function () {
-    onLoad()
-})
+    onLoad();
+});
