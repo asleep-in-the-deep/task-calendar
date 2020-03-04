@@ -70,6 +70,19 @@ body {
     appearance: none;
 }
 
+.color-desc {
+    position: absolute;
+    background: url('img/pantone.svg') no-repeat;
+    width: 30px;
+    height: 30px;
+    right: 160px;
+    top: 65px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
 .calendar {
     display: grid;
     width: 100%;
@@ -93,7 +106,7 @@ body {
     border-bottom: 1px solid rgba(166, 168, 179, 0.12);
     border-right: 1px solid rgba(166, 168, 179, 0.12);
     text-align: right;
-    padding: 14px 20px;
+    padding: 12px 20px;
     letter-spacing: 1px;
     font-size: 12px;
     box-sizing: border-box;
@@ -128,12 +141,33 @@ body {
     width: 17px;
     height: 17px;
     top: 12px;
-    left: 110px;
+    left: 106px;
 }
 
 .day:hover .day-button, .day:hover .add-task {
     display: block;
     cursor: pointer;
+}
+
+.count-hours {
+    position: absolute;
+    z-index: 5;
+    margin-left: -21px;
+    margin-top: 22px;
+    padding: 2px 5px;
+    border: rgba(0, 0, 0, 0.1) solid 1px;
+    background: #f5f7fa;
+    font-weight: 800;
+    color: crimson;
+}
+
+.change-day-list .count-hours {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
 }
 
 .task-group {
@@ -154,6 +188,8 @@ body {
     margin: 5px;
     border-left-style: solid;
     font-size: 12px;
+    word-wrap: break-word;
+    hyphens: auto;
     z-index: 2;
 }
 
@@ -229,6 +265,7 @@ body {
     background-size: cover;
     position: absolute;
     margin-left: 25px;
+    top: 30px;
     width: 80px;
     height: 80px;
     z-index: 5;
@@ -237,7 +274,8 @@ body {
 .current {
     display: inline-block;
     width: 15px;
-    padding: 5px;
+    padding: 3px;
+    margin: -3px;
     border-radius: 100%;
     text-align: center;
     font-weight: bold;
@@ -247,7 +285,7 @@ body {
 
 .blackout {
     display: none;
-    position: fixed;
+    position: absolute;
     background: rgba(0, 0, 0, 0.3);
     top: 0;
     bottom: 0;
@@ -300,12 +338,12 @@ p sup {
     cursor: pointer;
 }
 
-.task-form {
+.task-form, .change-form {
     display: flex;
     flex-direction: column;
 }
 
-.task-form input, .task-form textarea {
+.task-form input, .change-form input {
     width: 80%;
     margin: 10px 0 20px;
     padding: 5px 10px;
@@ -316,7 +354,7 @@ p sup {
     outline: none;
 }
 
-.task-form select {
+.task-form select, .day-form select, .change-form select {
     display: inline-block;
     position: relative;
     margin: 10px 0 20px;
@@ -336,7 +374,11 @@ p sup {
     appearance: none;
 }
 
-.form-button {
+.day-form select {
+    width: 35%;
+}
+
+.form-button, .change-button, .delete-button {
     display: inline-block;
     width: 40%;
     margin: 10px 0;
@@ -354,34 +396,64 @@ p sup {
     transition: border-radius linear 0.2s, width linear 0.2s;
 }
 
+.delete-button {
+    position: absolute;
+    margin: 0;
+    top: 385px;
+    right: 60px;
+    background: #B43E28;
+}
+
+.day-form .form-button {
+    width: 25%;
+    margin-left: 30px;
+    padding: 7px 10px;
+}
+
+.change-day-list {
+    margin-top: 20px;
+}
+
+.box-content .task {
+    font-size: 16px;
+    padding: 5px 80px 5px 10px;
+    margin-bottom: 10px;
+}
+
+.task-hours {
+    right: 40px;
+    position: absolute;
+    top: 0;
+}
+
+.task-hours:before {
+    content: '⏱';
+}
+
 .edit-task {
     position: absolute;
     background: url('img/settings.svg') no-repeat;
-    width: 17px;
-    height: 17px;
-    top: 2px;
-    right: 25px;
-    cursor: pointer;
-}
-
-.delete-task {
-    position: absolute;
-    background: url('img/delete.svg') no-repeat;
-    width: 17px;
-    height: 17px;
-    top: 2px;
-    right: 5px;
+    width: 23px;
+    height: 23px;
+    top: 3px;
+    right: 10px;
     cursor: pointer;
 }
 
 .box-add {
-    padding-left: 20px;
+    width: 25%;
     margin: 10px 0 20px;
+    padding: 3px 3px 4px 25px;
+    background: #f5f7fa;
+    font-size: 12px;
+    border: rgba(0, 0, 0, 0.1) solid 1px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 .box-add .add-task {
     display: inline-block;
-    left: 20px;
+    left: 25px;
     top: unset;
 }
 
