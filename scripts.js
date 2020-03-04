@@ -255,7 +255,7 @@ function onLoad() {
         drop: function (event, ui) {
             $(this).append(ui.draggable);
             $(this).removeClass('drop-hover');
-            let taskId = ui.draggable.attr('id');
+            let taskId = ui.draggable.attr('id').split('_')[1];
             let date = $(this).parent().attr('data-date');
             moveTask(taskId, date);
         }
