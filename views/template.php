@@ -16,8 +16,8 @@
                 font-family: "Emoji Font";
                 src: url("emojione-android.ttf") format("truetype");
             }
-            select, option {
-                font-family: "Emoji Font", Montserrat, serif, "sans-serif" !important;
+            .emoji {
+                font-family: "Emoji Font", Montserrat, "sans-serif" !important;
             }
         </style>
         <?php
@@ -57,17 +57,17 @@
                         <p>Название задачи <sup>*</sup></p>
                         <input type="text" name="title">
                         <p>Цвет задачи <sup>*</sup></p>
-                        <select name="color">
-                            <option value="yellow">Желтый 🐥</option>
-                            <option value="orange">Оранжевый 🦊</option>
-                            <option value="red">Красный 🍓</option>
-                            <option value="blue">Синий 🦋</option>
-                            <option value="sky">Голубой 🐬</option>
-                            <option value="green">Зеленый 🐸</option>
-                            <option value="sea">Морской 🌊</option>
-                            <option value="purple">Фиолетовый 🔮</option>
-                            <option value="pink">Розовый 🐷</option>
-                            <option value="brown">Коричневый 🐻</option>
+                        <select name="color" class="emoji">
+                            <option value="yellow" class="emoji">Желтый 🐥</option>
+                            <option value="orange" class="emoji">Оранжевый 🦊</option>
+                            <option value="red" class="emoji">Красный 🍓</option>
+                            <option value="blue" class="emoji">Синий 🦋</option>
+                            <option value="sky" class="emoji">Голубой 🐬</option>
+                            <option value="green" class="emoji">Зеленый 🐸</option>
+                            <option value="sea" class="emoji">Морской 🌊</option>
+                            <option value="purple" class="emoji">Фиолетовый 🔮</option>
+                            <option value="pink" class="emoji">Розовый 🐷</option>
+                            <option value="brown" class="emoji">Коричневый 🐻</option>
                         </select>
                         <p>Количество часов</p>
                         <input type="number" name="hours" step="any">
@@ -85,23 +85,23 @@
                         <p>Изменить название</p>
                         <input type="text" name="title">
                         <p>Изменить цвет</p>
-                        <select name="color">
-                            <option value="yellow">Желтый 🐥</option>
-                            <option value="orange">Оранжевый 🦊</option>
-                            <option value="red">Красный 🍓</option>
-                            <option value="blue">Синий 🦋</option>
-                            <option value="sky">Голубой 🐬</option>
-                            <option value="green">Зеленый 🐸</option>
-                            <option value="sea">Морской 🌊</option>
-                            <option value="purple">Фиолетовый 🔮</option>
-                            <option value="pink">Розовый 🐷</option>
-                            <option value="brown">Коричневый 🐻</option>
+                        <select name="color" class="emoji">
+                            <option value="yellow" class="emoji">Желтый 🐥</option>
+                            <option value="orange" class="emoji">Оранжевый 🦊</option>
+                            <option value="red" class="emoji">Красный 🍓</option>
+                            <option value="blue" class="emoji">Синий 🦋</option>
+                            <option value="sky" class="emoji">Голубой 🐬</option>
+                            <option value="green" class="emoji">Зеленый 🐸</option>
+                            <option value="sea" class="emoji">Морской 🌊</option>
+                            <option value="purple" class="emoji">Фиолетовый 🔮</option>
+                            <option value="pink" class="emoji">Розовый 🐷</option>
+                            <option value="brown" class="emoji">Коричневый 🐻</option>
                         </select>
                         <p>Изменить время</p>
                         <input type="number" step="any" name="hours">
                         <select name="status">
-                            <option value="0">Задача в работе 👀</option>
-                            <option value="1">Задача выполнена ✅</option>
+                            <option value="0" class="emoji">Задача в работе 👀</option>
+                            <option value="1" class="emoji">Задача выполнена ✅</option>
                         </select>
                         <input type="hidden" name="id" id="task-id">
                         <button type="submit" class="change-button">Обновить</button>
