@@ -22,7 +22,7 @@ class Database extends \Singleton implements \Data\DatabaseInterface
     }
 
     public function getLastInsertId() {
-        return $this->db->lastInsertRowID;
+        return $this->db->lastInsertRowID();
     }
 
     public function query($q) {

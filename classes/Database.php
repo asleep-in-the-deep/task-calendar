@@ -55,6 +55,16 @@ class Database extends Singleton
         return in_array("not_null", $parts);
     }
 
+    public static function hasDefault($parts) {
+        foreach ($parts as $key => $x) {
+            $new_parts = explode(":", $x);
+            if ($new_parts[0] == "default") {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static function getDefault($parts) {
         foreach ($parts as $key => $x) {
             $new_parts = explode(":", $x);

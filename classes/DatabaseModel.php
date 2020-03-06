@@ -69,7 +69,7 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         foreach ($this->fields as $key => $x) {
             $parts = explode("|", $x);
             $is_set = isset($this->data[$key]);
-            if (!$is_set && !in_array("default", $parts)){
+            if (!$is_set && !Database::hasDefault($parts)) {
                 // Поля нет в $data[] и у него нет значения по умолчанию.
                 // База данных выдаст ошибку
                 return false;
