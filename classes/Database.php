@@ -9,7 +9,7 @@ class Database extends Singleton
         if ($config["db_driver"] == "mysql") {
             $this->database_interface = new Data\Maria\Database();
         } else if ($config["db_driver"] == "sqlite") {
-
+            $this->database_interface = new Data\Lite\Database();
         } else {
             throw new Exception("Неизвестный db_driver.");
         }
