@@ -20,6 +20,6 @@ $config["db_pass"] = $dbPassword;
 $config["db_name"] = $dbName;
 
 $config["db_driver"] = "sqlite";
-$config["db_file"] = "calendar3.db";
+$config["db_file"] = "calendar.db";
 
 $config["emoji"] = "native"; // android, native
