@@ -11,7 +11,9 @@ class Result implements \Data\Result
     public function __construct($sqlite_result)
     {
         $this->internal_result = $sqlite_result;
-        $this->num_rows = $sqlite_result->numColumns();
+        if ($sqlite_result) {
+            $this->num_rows = $sqlite_result->numColumns();
+        }
     }
 
     public function fetch() {

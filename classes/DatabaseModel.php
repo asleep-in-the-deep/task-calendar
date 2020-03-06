@@ -12,6 +12,11 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
         $this->fields = static::getFields();
     }
 
+    public static function createTable() {
+        $builder = new QueryBuilder();
+        $builder->createTable(static::getTableName())->fieldsTable(static::getFields())->execute();
+    }
+
     public static function get($value) {
         $primary_key_array = [];
         if (is_array($value)) {

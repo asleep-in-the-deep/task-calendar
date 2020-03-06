@@ -11,8 +11,8 @@ class Day extends DatabaseModel {
     }
 
     public static function getFields() {
-        return ["date" => "primary|date",
-                "status" => "boolean"];
+        return ["date" => "primary|date|not_null",
+                "status" => "boolean|not_null"];
     }
 
     public function isHoliday() {

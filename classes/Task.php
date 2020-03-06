@@ -9,10 +9,10 @@ class Task extends DatabaseModel {
     public static function getFields() {
         return ["id" => "primary|integer|default|increment",
                 "date" => "date",
-                "title" => "varchar:255",
-                "color" => "varchar:20|default",
-                "hours" => "float",
-                "status" => "boolean|default"];
+                "title" => "varchar:255|not_null",
+                "color" => "varchar:20|default:yellow",
+                "hours" => "float|default:1",
+                "status" => "boolean|default:0"];
     }
 
     public static function getTableName() {

@@ -18,6 +18,10 @@ class Database extends \Singleton implements \Data\DatabaseInterface
         $this->db->set_charset('utf8');
     }
 
+    public static function getAutoincrement() {
+        return "AUTO_INCREMENT";
+    }
+
     public static function escape($string){
         return static::getInstance()->db->real_escape_string($string);
     }

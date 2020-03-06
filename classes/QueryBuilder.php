@@ -30,6 +30,17 @@ class QueryBuilder
         return $this;
     }
 
+    public function createTable($tablename) {
+        $this->type = "create";
+        $this->tablename = Database::escape($tablename);
+        return $this;
+    }
+
+    public function fieldsTable($fields) {
+        $this->fields = $fields;
+        return $this;
+    }
+
     public function fields($fields) {
         $this->fields = [];
         foreach ($fields as $key => $value) {
@@ -93,6 +104,28 @@ class QueryBuilder
                 $complex_where = " WHERE $this->where";
             }
             $query = "UPDATE `$this->tablename` SET $this->values".$complex_where;
+            return Database::getInstance()->query($query);
+        } else if ($this->type === "create") {
+            $table_fields_array = [];
+
+            foreach ($this->fields as $key => $value) {
+                $x = explode("|", $value);
+                $escaped_field = Database::escape($key);
+                $type = Database::getFieldType($x);
+                $string = "`$escaped_field` $type";
+
+                if (Database::isPrimary($x)) $string .= " PRIMARY KEY";
+                if (Database::isIncrement($x)) $string .= " ".Database::getAutoincrement();
+                if (Database::isNotNull($x)) $string .= " NOT NULL";
+                if (($v = Database::getDefault($x)) != null) {
+                    $escaped =  Database::escape($v);
+                    $string .= " DEFAULT '$escaped'";
+                }
+
+                $table_fields_array[] = $string;
+            }
+            $table_fields = implode(",", $table_fields_array);
+            $query = "CREATE TABLE `$this->tablename` ($table_fields)";
             return Database::getInstance()->query($query);
         }
     }

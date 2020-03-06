@@ -13,6 +13,10 @@ class Database extends \Singleton implements \Data\DatabaseInterface
         $this->db = new \SQLite3($config["db_file"]);
     }
 
+    public static function getAutoincrement() {
+        return "AUTOINCREMENT";
+    }
+
     public static function escape($string){
         return static::getInstance()->db::escapeString($string);
     }
