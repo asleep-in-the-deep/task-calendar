@@ -404,11 +404,18 @@ p sup {
 }
 
 .delete-button {
-    position: absolute;
-    margin: 0;
-    top: 385px;
-    right: 60px;
     background: #B43E28;
+    margin: 10px 10px;
+}
+
+.change-button, .delete-button {
+    flex: 3 1 100px;
+}
+
+.change-form-flex {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .day-form .form-button {

@@ -112,9 +112,11 @@
                             <option value="1" class="emoji">Задача выполнена ✅</option>
                         </select>
                         <input type="hidden" name="id" id="task-id">
-                        <button type="submit" class="change-button">Обновить</button>
+                        <div class="change-form-flex">
+                            <button type="submit" class="change-button">Обновить</button>
+                            <button type="button" class="delete-button">Удалить задачу</button>
+                        </div>
                     </form>
-                    <button type="button" class="delete-button">Удалить задачу</button>
                 </div>
             </div>
 
