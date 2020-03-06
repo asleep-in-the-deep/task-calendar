@@ -302,9 +302,11 @@ body {
 
 .popup-box {
     display: none;
-    position: relative;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: 30%;
-    margin: 200px auto;
     background: #fff;
     padding: 20px;
     border-radius: 10px;
