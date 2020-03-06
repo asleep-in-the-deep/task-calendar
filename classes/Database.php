@@ -3,35 +3,21 @@
 
 class Database extends Singleton
 {
-    protected $db;
+    protected $database_interface;
     protected function __construct() {
         $config = Config::getInstance();
-        $this->db = new mysqli($config["db_host"], $config["db_user"], $config["db_pass"], $config["db_name"]);
-        
-        if($this->db->connect_error) {
-            die('Connection failed: ' . $this->db->connect_error);
+        if ($config["db_driver"] == "mysql") {
+            $this->database_interface = new Data\Maria\Database();
+        } else if ($config["db_driver"] == "sqlite") {
+
+        } else {
+            throw new Exception("Неизвестный db_driver.");
         }
-        $this->db->set_charset('utf8');
         parent::__construct();
     }
 
     public static function escape($string){
-        return static::getInstance()->direct()->real_escape_string($string);
-    }
-
-    public static function getFieldType($parts){
-        $types = ["integer", "date", "boolean", "text", "varchar"];
-
-        foreach ($parts as $key => $x) {
-            if (in_array($x, $types)) {
-                return $x;
-            }
-            $new_parts = explode(":", $x);
-            if (in_array($new_parts[0], $types)) {
-                return $new_parts[0];
-            }
-        }
-        return null;
+        return static::getInstance()->direct()::escape($string);
     }
 
     public static function getPrimaryKey($fields){
@@ -44,7 +30,15 @@ class Database extends Singleton
         return null;
     }
 
+    public function getLastInsertId() {
+        return $this->database_interface->getLastInsertId();
+    }
+
+    public function query($query) {
+        return $this->database_interface->query($query);
+    }
+
     public function direct() {
-        return $this->db;
+        return $this->database_interface;
     }
 }

@@ -13,9 +13,13 @@ $dbPassword = 'root';
 $dbName = 'calendar';
 
 $config = Config::getInstance();
+$config["db_driver"] = "mysql";
 $config["db_host"] = $dbHost;
 $config["db_user"] = $dbUsername;
 $config["db_pass"] = $dbPassword;
 $config["db_name"] = $dbName;
+
+// $config["db_host"] = "sqlite";
+// $config["db_file"] = "calendar.db";
 
 $config["emoji"] = "native"; // android, native

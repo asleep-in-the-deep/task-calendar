@@ -74,26 +74,26 @@ class QueryBuilder
                 $complex_where = " WHERE $this->where";
             }
             $query = "SELECT $this->fields FROM `$this->tablename`".$complex_where;
-            return Database::getInstance()->direct()->query($query);
+            return Database::getInstance()->query($query);
         } else if ($this->type === "insert") {
             $fields = implode(",", $this->fields);
             $values = implode(",", $this->values);
             $query = "INSERT INTO `$this->tablename` ($fields) VALUES($values)";
-            return Database::getInstance()->direct()->query($query);
+            return Database::getInstance()->query($query);
         } else if ($this->type === "delete") {
             $complex_where = "";
             if ($this->where !== null) {
                 $complex_where = " WHERE $this->where";
             }
             $query = "DELETE FROM `$this->tablename`".$complex_where;
-            return Database::getInstance()->direct()->query($query);
+            return Database::getInstance()->query($query);
         } else if ($this->type === "update") {
             $complex_where = "";
             if ($this->where !== null) {
                 $complex_where = " WHERE $this->where";
             }
             $query = "UPDATE `$this->tablename` SET $this->values".$complex_where;
-            return Database::getInstance()->direct()->query($query);
+            return Database::getInstance()->query($query);
         }
     }
 

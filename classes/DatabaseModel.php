@@ -83,7 +83,7 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
                 $parts = explode("|", $value);
 
                 if (in_array("increment", $parts) && in_array("primary", $parts)) {
-                    $this->data[$key] = Database::getInstance()->direct()->insert_id;
+                    $this->data[$key] = Database::getInstance()->getLastInsertId();
                 }
             }
             $this->changed_fields[] = "";
@@ -105,7 +105,7 @@ class DatabaseModel implements JsonSerializable, ArrayAccess {
     protected static function fetch($result) {
         $objects = [];
         if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
+            while($row = $result->fetch()) {
                 array_push($objects, new static($row));
             }
         }
