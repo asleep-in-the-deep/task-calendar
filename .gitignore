@@ -1,7 +1,7 @@
 .idea/
 .DS_Store
 
-config.php
+/config.php
 calendar.db
 settings.json
 
