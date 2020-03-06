@@ -160,7 +160,7 @@ function HandleChangeTask(current) {
     let id = $(current).parent().attr('id');
     let title = $(current).prev('span').text();
     let color = $(current).parent().attr('class').split(' ')[1];
-    let hours = $(current).next('.task-hours').text();
+    let hours = $(current).parent().attr('data-hours');
 
     $('#change-task input[name=title]').val(title);
     $('#change-task select[name=color]').val(color).change();

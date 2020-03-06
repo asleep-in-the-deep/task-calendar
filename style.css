@@ -8,7 +8,7 @@ body {
     background-position: center center;
     padding: 40px 0;
     box-sizing: border-box;
-    font-family: Montserrat, "sans-serif";
+    font-family: 'Montserrat', sans-serif;
     color: #51565d;
 }
 
@@ -253,6 +253,11 @@ body {
     color: #915b4a;
 }
 
+.gray {
+    border-left-color: black;
+    background: #dedede;
+}
+
 .done {
     border-left-color: #9d8f8f;
     background: rgba(249, 249, 249, 0.7);
@@ -421,13 +426,11 @@ p sup {
 }
 
 .task-hours {
-    right: 40px;
+    right: 35px;
     position: absolute;
-    top: 0;
-}
-
-.task-hours:before {
-    content: '⏱';
+    top: 3px;
+    text-align: center;
+    width: 20px;
 }
 
 .edit-task {
@@ -438,6 +441,14 @@ p sup {
     top: 3px;
     right: 10px;
     cursor: pointer;
+}
+
+.edit-task-empty {
+    position: absolute;
+    width: 23px;
+    height: 23px;
+    top: 3px;
+    right: 10px;
 }
 
 .box-add {
