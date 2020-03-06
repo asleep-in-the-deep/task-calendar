@@ -23,3 +23,13 @@ $config["db_driver"] = "sqlite";
 $config["db_file"] = "calendar.db";
 
 $config["emoji"] = "native"; // android, native
+
+$content = file_get_contents("settings.json");
+if ($content) {
+    $new_config = json_decode($content, true);
+    if ($new_config) {
+        foreach ($new_config as $k => $value) {
+            $config[$k] = $value;
+        }
+    }
+}
